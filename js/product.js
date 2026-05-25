@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Product Page Logic
+ * Faiz Store — Product Page Logic
  */
 
 const ProductController = {
@@ -46,7 +46,7 @@ const ProductController = {
 
     // Title
     document.getElementById('product-title').textContent = lang === 'id' ? this.product.nameId : this.product.nameEn;
-    document.title = `${lang === 'id' ? this.product.nameId : this.product.nameEn} — Lumina Commerce`;
+    document.title = `${lang === 'id' ? this.product.nameId : this.product.nameEn} — Faiz Store`;
 
     // Stock Badge
     let stockHtml = '';

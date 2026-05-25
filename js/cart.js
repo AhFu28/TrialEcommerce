@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Cart & Checkout Logic
+ * Faiz Store — Cart & Checkout Logic
  */
 
 const CartController = {
@@ -237,7 +237,7 @@ const CartController = {
         <div style="font-size:4rem; margin-bottom:1rem;">🎉</div>
         <h2 style="font-size:2rem; font-weight:bold; margin-bottom:0.5rem; font-family:var(--font-heading)">Pesanan Berhasil!</h2>
         <p style="color:var(--color-text-secondary); margin-bottom:2rem;">ID Pesanan: <strong>${orderId}</strong></p>
-        <p style="max-width:400px; margin-bottom:2rem; line-height:1.6;">Terima kasih telah berbelanja di Lumina Commerce. Kami telah mengirimkan email konfirmasi pesanan Anda.</p>
+        <p style="max-width:400px; margin-bottom:2rem; line-height:1.6;">Terima kasih telah berbelanja di Faiz Store. Kami telah mengirimkan email konfirmasi pesanan Anda.</p>
         <a href="/" class="btn btn--primary">Kembali ke Beranda</a>
       `;
       document.body.appendChild(overlay);

@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — main.js
+ * Faiz Store — main.js
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -157,13 +157,13 @@ function renderFooter() {
         <div class="footer__grid">
           <div class="footer__brand">
             <a href="${basePath}index.html" class="footer__logo">
-              <span class="footer__logo-text">Lumina Commerce</span>
+              <span class="footer__logo-text">Faiz Store</span>
             </a>
             <p class="footer__desc">Professional Quality, Delivered Daily</p>
           </div>
         </div>
         <div class="footer__bottom">
-          <p class="footer__copy">&copy; 2024 Lumina Commerce. All Rights Reserved.</p>
+          <p class="footer__copy">&copy; 2024 Faiz Store. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

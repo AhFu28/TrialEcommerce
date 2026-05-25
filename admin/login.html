@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login — Lumina Commerce</title>
+  <title>Admin Login — Faiz Store</title>
   <link rel="stylesheet" href="../css/design-system.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/auth.css">
@@ -16,7 +16,7 @@
       <div class="auth-panel__header">
         <div style="width: 48px; height: 48px; background: var(--color-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: var(--text-2xl); font-weight: bold; color: white; margin: 0 auto var(--space-4);">L</div>
         <h2 class="auth-panel__title" style="font-size: var(--text-2xl);">Admin Panel</h2>
-        <p class="auth-panel__subtitle">Login to manage Lumina Commerce</p>
+        <p class="auth-panel__subtitle">Login to manage Faiz Store</p>
       </div>
 
       <form class="auth-form" id="admin-login-form">
@@ -48,6 +48,7 @@
   <script src="../js/auth.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
       if (Auth.isAdmin()) {
         window.location.href = 'index.html';
         return;

@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Bilingual i18n System (EN / ID)
+ * Faiz Store — Bilingual i18n System (EN / ID)
  */
 
 const FAIZ_I18N = {
@@ -88,9 +88,9 @@ const FAIZ_I18N = {
 
     // Auth
     login_title: "Welcome Back",
-    login_subtitle: "Sign in to your Lumina Commerce account",
+    login_subtitle: "Sign in to your Faiz Store account",
     register_title: "Create Account",
-    register_subtitle: "Join Lumina Commerce today",
+    register_subtitle: "Join Faiz Store today",
     email_label: "Email",
     password_label: "Password",
     confirm_password: "Confirm Password",
@@ -255,9 +255,9 @@ const FAIZ_I18N = {
 
     // Auth
     login_title: "Selamat Datang Kembali",
-    login_subtitle: "Masuk ke akun Lumina Commerce Anda",
+    login_subtitle: "Masuk ke akun Faiz Store Anda",
     register_title: "Buat Akun",
-    register_subtitle: "Bergabung dengan Lumina Commerce hari ini",
+    register_subtitle: "Bergabung dengan Faiz Store hari ini",
     email_label: "Email",
     password_label: "Kata Sandi",
     confirm_password: "Konfirmasi Kata Sandi",

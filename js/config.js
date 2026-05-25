@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Configuration
+ * Faiz Store — Configuration
  * ================================================
  * SETUP REQUIRED:
  * 1. Go to https://console.cloud.google.com/
@@ -21,7 +21,7 @@ const STORE_CONFIG = {
   ],
 
   // Store Configuration
-  STORE_NAME: "Lumina Commerce",
+  STORE_NAME: "Faiz Store",
   STORE_TAGLINE_EN: "Your Everyday Lifestyle Essentials",
   STORE_TAGLINE_ID: "Kebutuhan Sehari-hari & Gaya Hidup Anda",
   STORE_EMAIL: "hello@faizstore.com",

@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Authentication (Email/Password)
+ * Faiz Store — Authentication (Email/Password)
  */
 
 const Auth = {

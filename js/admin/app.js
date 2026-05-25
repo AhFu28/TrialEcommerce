@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Admin App
+ * Faiz Store — Admin App
  * Handles routing, modals, and shared admin state
  */
 

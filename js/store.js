@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Central Data Store
+ * Faiz Store — Central Data Store
  * Simulates a backend using localStorage
  */
 

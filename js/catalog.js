@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce — Catalog Page Logic
+ * Faiz Store — Catalog Page Logic
  */
 
 const CatalogController = {

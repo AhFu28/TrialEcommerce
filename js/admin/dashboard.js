@@ -1,5 +1,5 @@
 /**
- * Lumina Commerce Admin — Dashboard Section
+ * Faiz Store Admin — Dashboard Section
  * KPI cards, charts, recent orders, low stock alerts
  */
 

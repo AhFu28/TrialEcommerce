@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catalog — Lumina Commerce</title>
+  <title>Catalog — Faiz Store</title>
   
   <link rel="stylesheet" href="./css/design-system.css">
   <link rel="stylesheet" href="./css/components.css">
@@ -98,7 +98,7 @@
       const grid = document.getElementById('catalog-products');
       let products = Store.getAllProducts();
 
-      // Duplicate products artificially to match the 12+ look of Lumina Commerce
+      // Duplicate products artificially to match the 12+ look of Faiz Store
       while(products.length > 0 && products.length < 8) {
         products = products.concat(products).slice(0, 8);
       }
