@@ -21,17 +21,19 @@
 
       <form class="auth-form" id="admin-login-form">
         <div class="auth-form-group" style="text-align: left;">
+          <label for="email">Admin Email</label>
+          <input type="email" id="email" required placeholder="admin@luminacommerce.com" value="admin@luminacommerce.com">
+        </div>
+        <div class="auth-form-group" style="text-align: left;">
           <label for="password">Admin Password</label>
-          <input type="password" id="password" required placeholder="Enter password (demo: admin123)">
+          <input type="password" id="password" required placeholder="Enter password (demo: admin)" value="admin">
         </div>
 
         <button type="submit" class="btn btn--primary" style="margin-top:var(--space-2);">Login to Dashboard</button>
         
         <div id="login-error" style="color:var(--color-error); font-size:var(--text-sm); display:none; margin-top:var(--space-2);"></div>
 
-        <div class="auth-divider">or</div>
 
-        <div class="google-btn-wrapper" id="admin-google-btn"></div>
       </form>
       
       <div style="margin-top:var(--space-6); font-size:var(--text-xs); color:var(--color-text-muted);">
@@ -46,9 +48,8 @@
   <script src="../js/auth.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // If already logged in as admin, redirect
-      if (FaizAuth.isAdmin()) {
-        window.location.href = '/admin/index.html';
+      if (Auth.isAdmin()) {
+        window.location.href = 'index.html';
         return;
       }
 
@@ -57,30 +58,17 @@
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        // Using simple session password for demo/dev
-        if (password === 'admin123') {
-          sessionStorage.setItem('faiz_admin_session', 'true');
-          window.location.href = '/admin/index.html';
+        const res = Auth.adminLogin(email, password);
+        if (res.success) {
+          window.location.href = 'index.html';
         } else {
-          errorDiv.textContent = 'Invalid admin password';
+          errorDiv.textContent = res.error;
           errorDiv.style.display = 'block';
         }
       });
-
-      // Initialize Google Sign-In for Admin
-      window.onload = () => {
-        FaizAuth.initGoogleSignIn('admin-google-btn', (user) => {
-          if (FaizAuth.isAdmin()) {
-            window.location.href = '/admin/index.html';
-          } else {
-            errorDiv.textContent = 'This Google account is not authorized as an admin.';
-            errorDiv.style.display = 'block';
-            FaizAuth.logout();
-          }
-        });
-      };
     });
   </script>
 </body>

@@ -55,7 +55,12 @@ const AdminApp = {
   // ── Dashboard ────────────────────────────────────────────────────────
   renderDashboard(container) {
     const products = Store.getAllProducts();
+    const orders = Store.getOrders();
     const totalProducts = products.length;
+    
+    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+    const totalOrders = orders.length;
+    const aov = totalOrders > 0 ? (totalRevenue / totalOrders) : 0;
     
     container.innerHTML = `
       <div class="admin-header">
@@ -78,32 +83,32 @@ const AdminApp = {
             <div class="kpi-title">Total Revenue</div>
             <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
           </div>
-          <div class="kpi-value">$124,500.00</div>
-          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> +12.5% vs last month</div>
+          <div class="kpi-value">${Store.formatCurrency(totalRevenue)}</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> LIVE</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-header">
             <div class="kpi-title">Orders</div>
             <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
           </div>
-          <div class="kpi-value">1,248</div>
-          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> +5.2% vs last month</div>
+          <div class="kpi-value">${totalOrders}</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> LIVE</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-header">
             <div class="kpi-title">Average Order Value</div>
             <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
           </div>
-          <div class="kpi-value">$99.75</div>
-          <div class="kpi-trend negative"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 18l-9.5-9.5-5 5L1 6"/><polyline points="17 18 23 18 23 12"/></svg> -1.2% vs last month</div>
+          <div class="kpi-value">${Store.formatCurrency(aov)}</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> LIVE</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-header">
-            <div class="kpi-title">Customer Conversion Rate</div>
+            <div class="kpi-title">Active Products</div>
             <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
           </div>
-          <div class="kpi-value">3.8%</div>
-          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> +0.4% vs last month</div>
+          <div class="kpi-value">${totalProducts}</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> LIVE</div>
         </div>
       </div>
 
@@ -362,14 +367,40 @@ const AdminApp = {
     }
   },
 
-  // ── Orders (Dummy view) ───────────────────────────────────────────
+  // ── Orders ───────────────────────────────────────────
   renderOrders(container) {
+    const orders = Store.getOrders();
+
     container.innerHTML = `
       <div class="admin-header">
         <h1 class="admin-page-title">Order Management</h1>
       </div>
       <div class="table-panel">
-        <p>No new orders today.</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orders.length > 0 ? orders.map(o => `
+              <tr>
+                <td style="font-weight: 600;">${o.id}</td>
+                <td>${new Date(o.date).toLocaleDateString()}</td>
+                <td>
+                  <div>${o.customerName}</div>
+                  <div style="font-size: 0.75rem; color: var(--admin-text-secondary);">${o.customerEmail}</div>
+                </td>
+                <td style="font-weight: 600;">${Store.formatCurrency(o.total)}</td>
+                <td><span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600; background-color: #E5F6EE; color: var(--admin-primary);">${o.status}</span></td>
+              </tr>
+            `).join('') : `<tr><td colspan="5" style="text-align:center; padding: 2rem;">No orders yet.</td></tr>`}
+          </tbody>
+        </table>
       </div>
     `;
   }

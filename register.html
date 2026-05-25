@@ -80,7 +80,6 @@
   <script src="./js/auth.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      FaizI18n.init();
       
       const form = document.getElementById('register-form');
       const errorDiv = document.getElementById('register-error');
@@ -94,26 +93,19 @@
         const confirmPassword = document.getElementById('confirmPassword').value;
 
         if (password !== confirmPassword) {
-          errorDiv.textContent = FaizI18n.currentLang === 'id' ? 'Kata sandi tidak cocok' : 'Passwords do not match';
+          errorDiv.textContent = 'Kata sandi tidak cocok';
           errorDiv.style.display = 'block';
           return;
         }
 
-        const res = FaizAuth.register(email, password, firstName, lastName);
+        const res = Auth.register({ firstName, lastName, email, password });
         if (res.success) {
-          window.location.href = '/';
+          window.location.href = 'index.html';
         } else {
-          errorDiv.textContent = res.message;
+          errorDiv.textContent = res.error;
           errorDiv.style.display = 'block';
         }
       });
-
-      // Initialize Google Sign-In
-      window.onload = () => {
-        FaizAuth.initGoogleSignIn('google-signup-btn', (user) => {
-          window.location.href = '/';
-        });
-      };
     });
   </script>
 </body>

@@ -67,7 +67,6 @@
   <script src="./js/auth.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      FaizI18n.init();
       
       const form = document.getElementById('login-form');
       const errorDiv = document.getElementById('login-error');
@@ -77,25 +76,16 @@
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        const res = FaizAuth.login(email, password);
+        const res = Auth.login(email, password);
         if (res.success) {
-          const redirect = sessionStorage.getItem('redirect_after_login') || '/';
+          const redirect = sessionStorage.getItem('redirect_after_login') || 'index.html';
           sessionStorage.removeItem('redirect_after_login');
           window.location.href = redirect;
         } else {
-          errorDiv.textContent = res.message;
+          errorDiv.textContent = res.error;
           errorDiv.style.display = 'block';
         }
       });
-
-      // Initialize Google Sign-In
-      window.onload = () => {
-        FaizAuth.initGoogleSignIn('google-signin-btn', (user) => {
-          const redirect = sessionStorage.getItem('redirect_after_login') || '/';
-          sessionStorage.removeItem('redirect_after_login');
-          window.location.href = redirect;
-        });
-      };
     });
   </script>
 </body>

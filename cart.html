@@ -174,6 +174,15 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Require user to be logged in to access checkout
+      if (!Auth.requireUser()) return;
+
+      const user = Auth.getCurrentUser();
+      const addressBlock = document.querySelector('.address-block strong');
+      if (addressBlock && user) {
+        addressBlock.textContent = (user.firstName || '') + ' ' + (user.lastName || '');
+      }
+
       // Setup simple radio selection UI
       document.querySelectorAll('.radio-option').forEach(opt => {
         opt.addEventListener('click', function() {
@@ -229,11 +238,33 @@
         alert("Your cart is empty!");
         return;
       }
-      if (confirm("Proceed with payment?")) {
-        Store.clearCart();
-        alert("Payment successful! Thank you for shopping at Lumina Commerce.");
-        window.location.href = "index.html";
-      }
+      
+      const user = Auth.getCurrentUser();
+
+      // Calculate total
+      let subtotal = 0;
+      cart.forEach(item => {
+        const product = Store.getProductById(item.productId);
+        if (product) subtotal += (product.price * item.quantity);
+      });
+      const total = subtotal + 15000 + 2000;
+
+      // Generate order
+      const orderData = {
+        userId: user.id,
+        customerName: user.firstName + ' ' + (user.lastName || ''),
+        customerEmail: user.email,
+        items: cart,
+        subtotal: subtotal,
+        shipping: 15000,
+        fee: 2000,
+        total: total,
+        status: 'Paid'
+      };
+
+      const order = Store.createOrder(orderData);
+      Store.clearCart();
+      window.location.href = `success.html?id=${order.id}`;
     }
   </script>
 </body>

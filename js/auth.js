@@ -1,21 +1,20 @@
 /**
- * Lumina Commerce — Authentication (Email/Password + Google Identity Services)
+ * Lumina Commerce — Authentication (Email/Password)
  */
 
-const FaizAuth = {
-  SESSION_KEY: "faiz_session",
-  ADMIN_SESSION_KEY: "faiz_admin_session",
+const Auth = {
+  SESSION_KEY: "lumina_session",
+  ADMIN_SESSION_KEY: "lumina_admin_session",
 
   // ── Helpers ─────────────────────────────────────────────────────
   hashPassword(password) {
-    // Simple hash for demo (in production: use bcrypt on server)
     let hash = 0;
     for (let i = 0; i < password.length; i++) {
       const chr = password.charCodeAt(i);
       hash = (hash << 5) - hash + chr;
       hash |= 0;
     }
-    return "faiz_" + Math.abs(hash).toString(36) + "_" + password.length;
+    return "lumina_" + Math.abs(hash).toString(36) + "_" + password.length;
   },
 
   // ── User Session ─────────────────────────────────────────────────
@@ -31,11 +30,19 @@ const FaizAuth = {
 
   clearSession() {
     sessionStorage.removeItem(this.SESSION_KEY);
-    sessionStorage.removeItem(this.ADMIN_SESSION_KEY);
   },
 
   isLoggedIn() {
     return !!this.getCurrentUser();
+  },
+
+  requireUser() {
+    if (!this.isLoggedIn()) {
+      sessionStorage.setItem('redirect_after_login', window.location.href);
+      window.location.href = 'login.html';
+      return false;
+    }
+    return true;
   },
 
   // ── Admin Session ────────────────────────────────────────────────
@@ -51,7 +58,7 @@ const FaizAuth = {
 
   requireAdmin() {
     if (!this.isAdmin()) {
-      window.location.href = './login.html';
+      window.location.href = './login.html'; // relative to admin folder
       return false;
     }
     return true;
@@ -63,110 +70,70 @@ const FaizAuth = {
 
   // ── Email/Password Register ──────────────────────────────────────
   register({ firstName, lastName, email, password }) {
-    const existing = FaizStore.getUserByEmail(email);
+    const existing = Store.getUserByEmail(email);
     if (existing) return { success: false, error: "Email already registered." };
 
-    const user = {
-      id: "user_" + Date.now(),
-      firstName, lastName,
-      email: email.toLowerCase(),
-      passwordHash: this.hashPassword(password),
-      provider: "email",
-      createdAt: new Date().toISOString(),
-      orders: [],
-    };
-    FaizStore.saveUser(user);
-    this.setSession({ id: user.id, firstName, lastName, email: user.email, provider: "email" });
-    return { success: true, user };
+    try {
+      const user = Store.createUser({
+        firstName, lastName,
+        email: email.toLowerCase(),
+        passwordHash: this.hashPassword(password),
+        role: "customer"
+      });
+      this.setSession({ id: user.id, firstName, lastName, email: user.email, role: "customer" });
+      return { success: true, user };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
   },
 
   // ── Email/Password Login ─────────────────────────────────────────
   login(email, password) {
-    const user = FaizStore.getUserByEmail(email.toLowerCase());
+    const user = Store.getUserByEmail(email.toLowerCase());
     if (!user) return { success: false, error: "No account found with this email." };
-    if (user.provider === "google") return { success: false, error: "Please use Google Sign-In for this account." };
-    if (user.passwordHash !== this.hashPassword(password)) return { success: false, error: "Incorrect password." };
+    
+    // Check if it's admin logging in from customer portal
+    if (user.role === 'admin' && !window.location.pathname.includes('/admin/')) {
+       // Allow admins to login as customers too for testing
+    }
 
-    this.setSession({ id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email, provider: "email" });
+    if (user.passwordHash && user.passwordHash !== this.hashPassword(password)) {
+      if (user.password && user.password !== password) {
+        return { success: false, error: "Incorrect password." };
+      }
+    } else if (user.password && user.password !== password) {
+       return { success: false, error: "Incorrect password." };
+    }
+
+    this.setSession({ id: user.id, firstName: user.firstName || user.name, lastName: user.lastName, email: user.email, role: user.role || 'customer' });
     return { success: true };
   },
 
-  // ── Google Sign-In (GIS) ─────────────────────────────────────────
-  initGoogleSignIn(buttonId, onSuccess, isAdmin = false) {
-    if (typeof google === "undefined") {
-      console.warn("Google Identity Services not loaded. Check your Client ID.");
-      return;
+  // ── Admin Login ──────────────────────────────────────────────────
+  adminLogin(email, password) {
+    const user = Store.getUserByEmail(email.toLowerCase());
+    if (!user || user.role !== 'admin') {
+      return { success: false, error: "Not an authorized admin account." };
     }
-    google.accounts.id.initialize({
-      client_id: STORE_CONFIG.GOOGLE_CLIENT_ID,
-      callback: (response) => this.handleGoogleCredential(response, onSuccess, isAdmin),
-    });
-    google.accounts.id.renderButton(document.getElementById(buttonId), {
-      theme: "outline",
-      size: "large",
-      text: "continue_with",
-      width: "100%",
-      shape: "rectangular",
-    });
-  },
-
-  handleGoogleCredential(response, onSuccess, isAdmin = false) {
-    // Decode JWT
-    const payload = JSON.parse(atob(response.credential.split(".")[1]));
-    const { email, given_name, family_name, name, picture, sub } = payload;
-
-    if (isAdmin) {
-      // Check if email is in admin list
-      if (STORE_CONFIG.ADMIN_EMAILS.length > 0 && !STORE_CONFIG.ADMIN_EMAILS.includes(email)) {
-        alert("Access denied. This Google account is not authorized as admin.");
-        return;
-      }
-      this.setAdminSession({ email, name, picture, provider: "google", loginAt: new Date().toISOString() });
-      onSuccess({ email, name, isAdmin: true });
-      return;
+    
+    if (user.password !== password) {
+      return { success: false, error: "Incorrect admin password." };
     }
 
-    // Regular user Google sign-in
-    let user = FaizStore.getUserByEmail(email);
-    if (!user) {
-      user = {
-        id: "user_" + sub,
-        firstName: given_name || name.split(" ")[0],
-        lastName: family_name || "",
-        email, picture, provider: "google",
-        createdAt: new Date().toISOString(),
-        orders: [],
-      };
-      FaizStore.saveUser(user);
-    }
-    this.setSession({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email, picture, provider: "google",
-    });
-    onSuccess({ email, name: user.firstName, isAdmin: false });
-  },
-
-  // ── Admin Password Login ─────────────────────────────────────────
-  adminLogin(password) {
-    if (password === STORE_CONFIG.ADMIN_PASSWORD) {
-      this.setAdminSession({ email: "admin", name: "Admin", provider: "password", loginAt: new Date().toISOString() });
-      return { success: true };
-    }
-    return { success: false, error: "Invalid admin password." };
+    this.setAdminSession({ id: user.id, name: user.name, email: user.email, role: "admin", loginAt: new Date().toISOString() });
+    return { success: true };
   },
 
   // ── Logout ───────────────────────────────────────────────────────
   logout() {
     this.clearSession();
-    const redirect = sessionStorage.getItem('redirect_after_login') || './index.html';
+    const redirect = sessionStorage.getItem('redirect_after_login') || 'index.html';
     sessionStorage.removeItem('redirect_after_login');
     window.location.href = redirect;
   },
 
   adminLogout() {
     sessionStorage.removeItem(this.ADMIN_SESSION_KEY);
-    window.location.href = "/admin/login.html";
+    window.location.href = "login.html";
   },
 };
