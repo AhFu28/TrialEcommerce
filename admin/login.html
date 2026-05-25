@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — Faiz Store</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+  
+  <div class="admin-login-layout fade-in">
+    <div class="admin-login-card">
+      
+      <div class="auth-panel__header">
+        <div style="width: 48px; height: 48px; background: var(--color-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: var(--text-2xl); font-weight: bold; color: white; margin: 0 auto var(--space-4);">F</div>
+        <h2 class="auth-panel__title" style="font-size: var(--text-2xl);">Admin Panel</h2>
+        <p class="auth-panel__subtitle">Login to manage Faiz Store</p>
+      </div>
+
+      <form class="auth-form" id="admin-login-form">
+        <div class="auth-form-group" style="text-align: left;">
+          <label for="password">Admin Password</label>
+          <input type="password" id="password" required placeholder="Enter password (demo: admin123)">
+        </div>
+
+        <button type="submit" class="btn btn--primary" style="margin-top:var(--space-2);">Login to Dashboard</button>
+        
+        <div id="login-error" style="color:var(--color-error); font-size:var(--text-sm); display:none; margin-top:var(--space-2);"></div>
+
+        <div class="auth-divider">or</div>
+
+        <div class="google-btn-wrapper" id="admin-google-btn"></div>
+      </form>
+      
+      <div style="margin-top:var(--space-6); font-size:var(--text-xs); color:var(--color-text-muted);">
+        <a href="../" style="color:inherit; text-decoration:none;">&larr; Back to Store</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/store.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // If already logged in as admin, redirect
+      if (FaizAuth.isAdmin()) {
+        window.location.href = '/admin/index.html';
+        return;
+      }
+
+      const form = document.getElementById('admin-login-form');
+      const errorDiv = document.getElementById('login-error');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const password = document.getElementById('password').value;
+
+        // Using simple session password for demo/dev
+        if (password === 'admin123') {
+          sessionStorage.setItem('faiz_admin_session', 'true');
+          window.location.href = '/admin/index.html';
+        } else {
+          errorDiv.textContent = 'Invalid admin password';
+          errorDiv.style.display = 'block';
+        }
+      });
+
+      // Initialize Google Sign-In for Admin
+      window.onload = () => {
+        FaizAuth.initGoogleSignIn('admin-google-btn', (user) => {
+          if (FaizAuth.isAdmin()) {
+            window.location.href = '/admin/index.html';
+          } else {
+            errorDiv.textContent = 'This Google account is not authorized as an admin.';
+            errorDiv.style.display = 'block';
+            FaizAuth.logout();
+          }
+        });
+      };
+    });
+  </script>
+</body>
+</html>

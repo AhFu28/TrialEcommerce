@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kontak — Faiz Store</title>
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/pages/secondary.css">
+</head>
+<body>
+  <div id="main-navbar"></div>
+  <div class="page-hero fade-in">
+    <div class="container">
+      <h1 class="page-hero__title" data-i18n="nav_contact">Hubungi Kami</h1>
+    </div>
+  </div>
+  <main class="container section fade-in">
+    <div class="contact-grid">
+      <div class="contact-form-wrap">
+        <h3 class="mb-4">Kirim Pesan</h3>
+        <form id="contact-form">
+          <input type="text" class="form-input mb-4" placeholder="Nama" required>
+          <input type="email" class="form-input mb-4" placeholder="Email" required>
+          <textarea class="form-input mb-4" placeholder="Pesan" rows="5" required></textarea>
+          <button class="btn btn--primary w-full">Kirim Pesan</button>
+        </form>
+      </div>
+      <div>
+        <h3 class="mb-4">Informasi Kontak</h3>
+        <div class="contact-info-card"><div class="contact-info-card__icon">✉️</div><div><strong>Email</strong><br>support@faizstore.com</div></div>
+        <div class="contact-info-card"><div class="contact-info-card__icon">📞</div><div><strong>Telepon</strong><br>+62 812 3456 7890</div></div>
+      </div>
+    </div>
+  </main>
+  <div id="main-footer"></div>
+  <script src="./js/config.js"></script><script src="./js/i18n.js"></script><script src="./js/store.js"></script><script src="./js/auth.js"></script><script src="./js/main.js"></script>
+  <script>document.getElementById('contact-form').addEventListener('submit', e => { e.preventDefault(); alert('Pesan terkirim!'); e.target.reset(); });</script>
+</body>
+</html>

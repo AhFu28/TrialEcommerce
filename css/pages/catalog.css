@@ -1,0 +1,219 @@
+/* ================================================================
+   Faiz Store — Catalog Page CSS
+   ================================================================ */
+
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: var(--space-8);
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+/* ── Sidebar Filter ─────────────────────────────────────────────── */
+.catalog-sidebar {
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-8));
+  height: fit-content;
+  max-height: calc(100vh - var(--nav-height) - var(--space-16));
+  overflow-y: auto;
+  padding-right: var(--space-4);
+}
+
+.filter-group {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.filter-group__title {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-semi);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+
+/* Category List */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.category-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.category-label:hover { color: var(--color-text-primary); }
+
+.category-label input {
+  accent-color: var(--color-accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Price Range */
+.price-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.price-inputs span { color: var(--color-text-muted); }
+
+.price-inputs input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+/* ── Main Content ───────────────────────────────────────────────── */
+.catalog-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+.catalog-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1rem;
+  flex: 1;
+  max-width: 400px;
+}
+
+.catalog-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: var(--text-sm);
+}
+
+.catalog-sort {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.catalog-sort label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.catalog-sort select {
+  padding: 0.4rem 2rem 0.4rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.mobile-filter-btn {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+}
+
+/* Mobile Drawer Overlay */
+.mobile-filter-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1001;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.mobile-filter-overlay.open { opacity: 1; display: block; }
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .catalog-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: var(--color-surface);
+    z-index: 1002;
+    padding: var(--space-6);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    max-height: 100vh;
+  }
+
+  .catalog-sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .catalog-sidebar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .catalog-sidebar__close {
+    font-size: var(--text-xl);
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .mobile-filter-btn { display: flex; }
+}

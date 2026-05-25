@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faiz Store — Your Everyday Lifestyle Essentials</title>
+  <meta name="description" content="Kebutuhan Sehari-hari & Gaya Hidup Anda">
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/pages/home.css">
+</head>
+<body>
+  <div id="main-navbar"></div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="home-hero" id="home-hero" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=80')">
+      <div class="container fade-in">
+        <div class="home-hero__content">
+          <h1 class="home-hero__title" id="hero-title" data-i18n="hero_title_placeholder">Elevate Your Space</h1>
+          <p class="home-hero__subtitle" id="hero-subtitle" data-i18n="hero_subtitle_placeholder">Discover premium home essentials curated just for you.</p>
+          <div class="home-hero__actions">
+            <a href="./catalog.html" class="btn btn--primary btn--lg" id="hero-cta" data-i18n="hero_cta">Belanja Sekarang</a>
+            <a href="./catalog.html" class="btn btn--secondary btn--lg" style="color:white; border-color:white;" data-i18n="hero_cta2">Jelajahi Koleksi</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Strip -->
+    <div class="trust-strip fade-in">
+      <div class="container trust-strip__grid">
+        <div class="trust-item">
+          <div class="trust-item__icon">🚚</div>
+          <div>
+            <div class="trust-item__title">Gratis Pengiriman</div>
+            <div class="trust-item__text">Untuk pesanan > Rp 200k</div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-item__icon">🔄</div>
+          <div>
+            <div class="trust-item__title">Pengembalian Mudah</div>
+            <div class="trust-item__text">Garansi 30 hari</div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-item__icon">💎</div>
+          <div>
+            <div class="trust-item__title">Kualitas Terjamin</div>
+            <div class="trust-item__text">Material premium</div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-item__icon">🎧</div>
+          <div>
+            <div class="trust-item__title">Dukungan 24/7</div>
+            <div class="trust-item__text">Siap membantu Anda</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories Section -->
+    <section class="categories-section section">
+      <div class="container">
+        <div class="section__header fade-in">
+          <h2 class="section__title" data-i18n="categories_title">Belanja Berdasarkan Kategori</h2>
+        </div>
+        <div class="categories-grid fade-in">
+          <a href="./catalog.html?cat=home-decor" class="category-card">
+            <div class="category-card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80" alt="Home Decor" loading="lazy">
+            </div>
+            <span class="category-card__title" data-i18n="cat_home_decor">Dekorasi Rumah</span>
+          </a>
+          <a href="./catalog.html?cat=daily-needs" class="category-card">
+            <div class="category-card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" alt="Daily Needs" loading="lazy">
+            </div>
+            <span class="category-card__title" data-i18n="cat_daily_needs">Kebutuhan Harian</span>
+          </a>
+          <a href="./catalog.html?cat=kitchen" class="category-card">
+            <div class="category-card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1556909195-b2f5f6c31e62?w=400&q=80" alt="Kitchen" loading="lazy">
+            </div>
+            <span class="category-card__title" data-i18n="cat_kitchen">Dapur & Makan</span>
+          </a>
+          <a href="./catalog.html?cat=bedroom" class="category-card">
+            <div class="category-card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?w=400&q=80" alt="Bedroom" loading="lazy">
+            </div>
+            <span class="category-card__title" data-i18n="cat_bedroom">Kamar & Ruang Tamu</span>
+          </a>
+          <a href="./catalog.html?cat=bath" class="category-card">
+            <div class="category-card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=400&q=80" alt="Bath" loading="lazy">
+            </div>
+            <span class="category-card__title" data-i18n="cat_bath">Mandi & Perawatan Diri</span>
+          </a>
+          <a href="./catalog.html?cat=cleaning" class="category-card">
+            <div class="category-card__img-wrap">
+              <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Cleaning" loading="lazy">
+            </div>
+            <span class="category-card__title" data-i18n="cat_cleaning">Kebersihan & Laundry</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-section section">
+      <div class="container">
+        <div class="section__header fade-in">
+          <h2 class="section__title" data-i18n="featured_title">Produk Pilihan</h2>
+          <p class="section__subtitle" data-i18n="featured_subtitle">Dipilih khusus untuk rumah Anda</p>
+        </div>
+        <div class="products-grid fade-in" id="featured-grid">
+          <!-- Products injected via JS -->
+        </div>
+        <div class="text-center fade-in" style="margin-top: var(--space-12);">
+          <a href="./catalog.html" class="btn btn--secondary btn--lg" data-i18n="see_all">Lihat Semua</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="section">
+      <div class="container">
+        <div class="section__header fade-in">
+          <h2 class="section__title" data-i18n="new_arrivals">Produk Baru</h2>
+        </div>
+        <div class="products-grid fade-in" id="new-arrivals-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+          <!-- Products injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Snippet -->
+    <section class="testimonials-snippet fade-in">
+      <div class="container">
+        <div class="testimonial-card">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p class="testimonial-card__text">"Kualitas produknya luar biasa! Benar-benar mengubah suasana ruang tamu saya menjadi lebih hangat dan elegan."</p>
+          <div class="testimonial-card__author">— Sarah M., Jakarta</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section fade-in">
+      <div class="container">
+        <h2 class="newsletter-section__title" data-i18n="newsletter_title">Tetap Terhubung</h2>
+        <p class="newsletter-section__subtitle" data-i18n="newsletter_subtitle">Dapatkan penawaran eksklusif, produk baru, dan tips gaya hidup.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); FaizUI.showToast(FaizI18n.currentLang === 'id' ? 'Terima kasih telah berlangganan!' : 'Thanks for subscribing!'); this.reset();">
+          <input type="email" class="form-input" required placeholder="Masukkan email Anda" data-i18n-placeholder="newsletter_placeholder">
+          <button type="submit" class="btn btn--primary" data-i18n="newsletter_btn">Berlangganan</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="main-footer"></div>
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/i18n.js"></script>
+  <script src="./js/store.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNavbar();
+      renderFooter();
+      
+      const lang = FaizI18n.currentLang;
+      
+      // Load Hero from Highlights
+      const highlights = FaizStore.getHighlights();
+      if (highlights && highlights.hero) {
+        document.getElementById('hero-title').textContent = lang === 'id' ? (highlights.hero.headlineId || highlights.hero.headline) : highlights.hero.headline;
+        document.getElementById('hero-subtitle').textContent = lang === 'id' ? (highlights.hero.subtitleId || highlights.hero.subtitle) : highlights.hero.subtitle;
+        if (highlights.hero.cta) {
+          document.getElementById('hero-cta').textContent = lang === 'id' ? (highlights.hero.ctaId || highlights.hero.cta) : highlights.hero.cta;
+        }
+        
+        // If it's a specific product, link to it
+        if (highlights.hero.productId) {
+          document.getElementById('hero-cta').href = `/product.html?id=${highlights.hero.productId}`;
+        }
+      }
+
+      // Load Featured Products
+      const featuredGrid = document.getElementById('featured-grid');
+      const allProducts = FaizStore.getProducts({status: 'published'});
+      
+      if (highlights && highlights.featured && highlights.featured.length > 0) {
+        const featuredHtml = highlights.featured.map(id => {
+          const p = FaizStore.getProductById(id);
+          return p && p.status === 'published' ? FaizUI.renderProductCard(p, lang) : '';
+        }).join('');
+        featuredGrid.innerHTML = featuredHtml;
+      } else {
+        // Fallback: take first 8
+        featuredGrid.innerHTML = allProducts.slice(0, 8).map(p => FaizUI.renderProductCard(p, lang)).join('');
+      }
+
+      // Load New Arrivals
+      const newArrivalsGrid = document.getElementById('new-arrivals-grid');
+      if (highlights && highlights.newArrivals && highlights.newArrivals.length > 0) {
+        const newHtml = highlights.newArrivals.map(id => {
+          const p = FaizStore.getProductById(id);
+          return p && p.status === 'published' ? FaizUI.renderProductCard(p, lang) : '';
+        }).join('');
+        newArrivalsGrid.innerHTML = newHtml;
+      } else {
+        // Fallback: take last 3
+        newArrivalsGrid.innerHTML = allProducts.slice(-3).reverse().map(p => FaizUI.renderProductCard(p, lang)).join('');
+      }
+    });
+  </script>
+</body>
+</html>

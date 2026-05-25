@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keranjang — Faiz Store</title>
+  <meta name="description" content="Keranjang belanja Anda di Faiz Store">
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/pages/cart.css">
+</head>
+<body>
+  <div id="main-navbar"></div>
+
+  <main class="container fade-in">
+    
+    <div class="page-hero" style="padding-top: var(--space-8); padding-bottom: 0;">
+      <h1 class="page-hero__title" data-i18n="cart_title">Keranjang Belanja</h1>
+    </div>
+
+    <!-- Empty State -->
+    <div id="cart-empty" class="empty-state hidden" style="margin-top: 50px; margin-bottom: 100px;">
+      <div class="empty-state__icon">🛒</div>
+      <h3 class="empty-state__title" data-i18n="cart_empty">Keranjang Anda kosong</h3>
+      <p class="empty-state__text" data-i18n="cart_empty_desc">Belum ada barang di keranjang Anda. Yuk, mulai belanja!</p>
+      <a href="./catalog.html" class="btn btn--primary" style="margin-top:20px;" data-i18n="start_shopping">Mulai Belanja</a>
+    </div>
+
+    <!-- Active Cart -->
+    <div id="cart-content" class="cart-layout" style="display:none;">
+      
+      <!-- Left side: Items & Forms -->
+      <div class="cart-main">
+        <div class="checkout-steps">
+          <div class="checkout-step active" id="step1-indicator"></div>
+          <div class="checkout-step" id="step2-indicator"></div>
+        </div>
+
+        <!-- Step 1: Cart Items -->
+        <div id="step1-cart" class="checkout-form active">
+          <div class="cart-items-wrap" id="cart-items-container">
+            <!-- Items injected via JS -->
+          </div>
+        </div>
+
+        <!-- Step 2: Checkout Form -->
+        <div id="step2-checkout" class="checkout-form">
+          <h3 class="mb-4" data-i18n="shipping_address">Alamat Pengiriman</h3>
+          
+          <div class="form-group">
+            <label data-i18n="full_name">Nama Lengkap</label>
+            <input type="text" id="chk-name" required>
+          </div>
+          
+          <div style="display:flex; gap:16px;">
+            <div class="form-group" style="flex:1;">
+              <label data-i18n="email">Email</label>
+              <input type="email" id="chk-email" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label data-i18n="phone">No. HP</label>
+              <input type="tel" id="chk-phone" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label data-i18n="address">Alamat Lengkap</label>
+            <input type="text" id="chk-address" required>
+          </div>
+
+          <div style="display:flex; gap:16px;">
+            <div class="form-group" style="flex:1;">
+              <label data-i18n="city">Kota</label>
+              <input type="text" id="chk-city" required>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label data-i18n="postal_code">Kode Pos</label>
+              <input type="text" id="chk-zip" required>
+            </div>
+          </div>
+
+          <h3 class="mt-6 mb-4" data-i18n="payment_method">Metode Pembayaran</h3>
+          <div class="payment-methods">
+            <div class="payment-method active" data-method="transfer">
+              <div class="payment-method__icon">🏦</div>
+              <div class="payment-method__name">Transfer Bank</div>
+            </div>
+            <div class="payment-method" data-method="ewallet">
+              <div class="payment-method__icon">📱</div>
+              <div class="payment-method__name">E-Wallet</div>
+            </div>
+            <div class="payment-method" data-method="cod">
+              <div class="payment-method__icon">💵</div>
+              <div class="payment-method__name">COD</div>
+            </div>
+          </div>
+
+          <button class="btn btn--secondary" id="btn-back" style="margin-right:10px;">Kembali</button>
+        </div>
+      </div>
+
+      <!-- Right side: Summary -->
+      <div>
+        <div class="cart-summary">
+          <h3 class="cart-summary__title" data-i18n="order_summary">Ringkasan Pesanan</h3>
+          
+          <div class="promo-input-group" id="promo-group">
+            <input type="text" id="promo-input" placeholder="Kode Promo">
+            <button class="btn btn--secondary" id="btn-apply-promo">Gunakan</button>
+          </div>
+          <div id="active-promo" style="display:none; margin-bottom:16px;">
+            <div class="promo-tag">
+              <span id="active-promo-code"></span>
+              <button id="btn-remove-promo">×</button>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span data-i18n="subtotal">Subtotal</span>
+            <span id="summary-subtotal">Rp 0</span>
+          </div>
+          <div class="summary-row" id="summary-discount-row" style="display:none;">
+            <span data-i18n="discount">Diskon</span>
+            <span id="summary-discount" style="color:var(--color-error)">- Rp 0</span>
+          </div>
+          <div class="summary-row">
+            <span data-i18n="shipping">Pengiriman</span>
+            <span id="summary-shipping">Gratis</span>
+          </div>
+          
+          <div class="summary-row summary-row--total">
+            <span data-i18n="total">Total</span>
+            <span id="summary-total">Rp 0</span>
+          </div>
+
+          <button class="btn btn--primary btn--full mt-6" id="btn-action" data-i18n="checkout">Checkout</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="main-footer"></div>
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/i18n.js"></script>
+  <script src="./js/store.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/cart.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNavbar();
+      renderFooter();
+      CartController.init();
+    });
+  </script>
+</body>
+</html>
