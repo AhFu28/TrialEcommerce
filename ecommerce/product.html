@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produk — Faiz Store</title>
+  <meta name="description" content="Detail produk Faiz Store">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/product.css">
+</head>
+<body>
+  <div id="main-navbar"></div>
+
+  <main class="container fade-in">
+    <div id="product-container" class="product-layout" style="display:none;">
+      
+      <!-- Gallery -->
+      <div class="product-gallery">
+        <div class="gallery-main">
+          <img id="main-img" src="" alt="Product">
+        </div>
+        <div class="gallery-thumbs" id="thumb-container">
+          <!-- Thumbs injected via JS -->
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="product-info">
+        <div class="product-breadcrumb" id="product-breadcrumb">
+          <!-- Breadcrumb injected -->
+        </div>
+
+        <h1 class="product-title" id="product-title">Loading...</h1>
+        
+        <div class="product-meta">
+          <div class="text-sm">
+            <span style="color:#F5A623">★★★★★</span>
+            <span class="text-muted ml-1" id="product-reviews">(4.8 / 120 ulasan)</span>
+          </div>
+          <div id="product-stock-badge"></div>
+        </div>
+
+        <div class="product-price-wrap" id="product-price-wrap">
+          <!-- Prices injected -->
+        </div>
+
+        <!-- Variants -->
+        <div id="variants-container"></div>
+
+        <!-- Bundles -->
+        <div id="bundle-container"></div>
+
+        <!-- Actions -->
+        <div class="product-actions">
+          <div class="qty-control">
+            <button class="qty-btn" id="qty-minus">−</button>
+            <input type="number" class="qty-input" id="qty-input" value="1" min="1" max="99">
+            <button class="qty-btn" id="qty-plus">+</button>
+          </div>
+          <button class="btn btn--primary btn-add-cart" id="btn-add-cart" data-i18n="add_to_cart">Tambah ke Keranjang</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="product-tabs">
+          <div class="tab-nav">
+            <button class="tab-btn active" data-tab="desc" data-i18n="tab_desc">Deskripsi</button>
+            <button class="tab-btn" data-tab="shipping" data-i18n="tab_shipping">Pengiriman</button>
+          </div>
+          <div class="tab-content active" id="tab-desc"></div>
+          <div class="tab-content" id="tab-shipping">
+            <p><strong>Gratis ongkir</strong> untuk pesanan di atas Rp 200.000.</p>
+            <ul>
+              <li>Reguler: 2-4 hari kerja</li>
+              <li>Sameday/Instant: Tersedia untuk area Jabodetabek</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="product-not-found" class="empty-state hidden" style="margin-top: 100px; margin-bottom: 100px;">
+      <div class="empty-state__icon">📦</div>
+      <h3 class="empty-state__title" data-i18n="product_not_found">Produk Tidak Ditemukan</h3>
+      <a href="/catalog.html" class="btn btn--primary" style="margin-top:20px;">Kembali Belanja</a>
+    </div>
+
+    <!-- Related Products -->
+    <section class="section" id="related-section" style="display:none; border-top: 1px solid var(--color-border-light); margin-top: 4rem; padding-top: 4rem;">
+      <div class="section__header">
+        <h2 class="section__title" data-i18n="related_products">Mungkin Anda Suka</h2>
+      </div>
+      <div class="products-grid" id="related-grid"></div>
+    </section>
+
+  </main>
+
+  <div id="main-footer"></div>
+
+  <!-- Scripts -->
+  <script src="/js/config.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/product.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNavbar();
+      renderFooter();
+      ProductController.init();
+    });
+  </script>
+</body>
+</html>

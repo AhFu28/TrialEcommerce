@@ -1,0 +1,182 @@
+/* ================================================================
+   Faiz Store — Auth Pages CSS
+   ================================================================ */
+
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Left Side: Image ───────────────────────────────────────────── */
+.auth-image {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+}
+
+.auth-image__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+  padding: var(--space-8);
+}
+
+.auth-image__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  margin-bottom: var(--space-4);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.auth-image__subtitle {
+  font-size: var(--text-lg);
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ── Right Side: Form ───────────────────────────────────────────── */
+.auth-panel {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8) var(--space-12);
+  position: relative;
+}
+
+.auth-panel__header {
+  margin-bottom: var(--space-8);
+  margin-top: auto;
+}
+
+.auth-panel__title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  margin-bottom: var(--space-2);
+}
+
+.auth-panel__subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.auth-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.auth-form-group label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
+
+.auth-form-group input {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  transition: all var(--transition-fast);
+}
+
+.auth-form-group input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(200, 168, 130, 0.1);
+}
+
+.auth-form-extras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.auth-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: var(--font-medium);
+}
+.auth-link:hover { text-decoration: underline; }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  margin: var(--space-6) 0;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.auth-divider:not(:empty)::before { margin-right: .5em; }
+.auth-divider:not(:empty)::after { margin-left: .5em; }
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  min-height: 40px; /* Space for GIS button */
+}
+
+.auth-footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  padding-top: var(--space-8);
+}
+
+/* ── Admin Login Variant ────────────────────────────────────────── */
+.admin-login-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--admin-sidebar-bg);
+  padding: var(--space-4);
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+}
+
+.admin-login-card .auth-panel__header { margin-top: 0; }
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .auth-image { display: none; }
+  .auth-panel { max-width: 100%; align-items: center; }
+  .auth-form { width: 100%; max-width: 400px; }
+  .auth-panel__header, .auth-footer { width: 100%; max-width: 400px; text-align: left; }
+}

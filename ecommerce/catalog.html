@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koleksi — Faiz Store</title>
+  <meta name="description" content="Jelajahi koleksi kebutuhan harian dan dekorasi rumah di Faiz Store.">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/catalog.css">
+</head>
+<body>
+  <div id="main-navbar"></div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="container fade-in">
+      <h1 class="page-hero__title" data-i18n="nav_catalog">Belanja</h1>
+      <div class="page-hero__breadcrumb">
+        <a href="/" data-i18n="nav_home">Beranda</a> / <span data-i18n="nav_catalog">Belanja</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="catalog-layout">
+      <!-- Mobile Overlay -->
+      <div class="mobile-filter-overlay" id="mobile-overlay"></div>
+
+      <!-- Sidebar -->
+      <aside class="catalog-sidebar" id="catalog-sidebar">
+        <div class="catalog-sidebar__header hide-desktop">
+          <h3 data-i18n="filter">Filter</h3>
+          <button class="catalog-sidebar__close" id="close-filter">×</button>
+        </div>
+
+        <div class="filter-group">
+          <h4 class="filter-group__title" data-i18n="categories_title">Kategori</h4>
+          <div class="category-list" id="category-filters">
+            <label class="category-label">
+              <input type="radio" name="cat" value="all" checked>
+              <span data-i18n="cat_all">Semua Produk</span>
+            </label>
+            <label class="category-label">
+              <input type="radio" name="cat" value="home-decor">
+              <span data-i18n="cat_home_decor">Dekorasi Rumah</span>
+            </label>
+            <label class="category-label">
+              <input type="radio" name="cat" value="daily-needs">
+              <span data-i18n="cat_daily_needs">Kebutuhan Harian</span>
+            </label>
+            <label class="category-label">
+              <input type="radio" name="cat" value="kitchen">
+              <span data-i18n="cat_kitchen">Dapur & Makan</span>
+            </label>
+            <label class="category-label">
+              <input type="radio" name="cat" value="bedroom">
+              <span data-i18n="cat_bedroom">Kamar & Ruang Tamu</span>
+            </label>
+            <label class="category-label">
+              <input type="radio" name="cat" value="bath">
+              <span data-i18n="cat_bath">Mandi & Perawatan Diri</span>
+            </label>
+            <label class="category-label">
+              <input type="radio" name="cat" value="cleaning">
+              <span data-i18n="cat_cleaning">Kebersihan & Laundry</span>
+            </label>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- Main Grid -->
+      <div class="catalog-main">
+        <div class="catalog-toolbar fade-in">
+          <button class="mobile-filter-btn" id="open-filter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            <span data-i18n="filter">Filter</span>
+          </button>
+          
+          <div class="catalog-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="search-input" placeholder="Cari produk..." data-i18n-placeholder="search_placeholder">
+          </div>
+
+          <div class="catalog-sort">
+            <label for="sort-select" data-i18n="sort_by" class="hide-mobile">Urutkan</label>
+            <select id="sort-select">
+              <option value="newest" data-i18n="sort_newest">Terbaru</option>
+              <option value="popular" data-i18n="sort_popular">Terpopuler</option>
+              <option value="price-low" data-i18n="sort_price_low">Harga: Termurah</option>
+              <option value="price-high" data-i18n="sort_price_high">Harga: Termahal</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="active-promos-banner" style="margin-bottom: var(--space-4);"></div>
+
+        <div class="products-grid fade-in" id="catalog-grid">
+          <!-- Products injected here -->
+        </div>
+
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-state__icon">🔍</div>
+          <h3 class="empty-state__title" data-i18n="no_products">Tidak ada produk ditemukan</h3>
+          <p class="empty-state__text">Coba ubah filter atau kata kunci pencarian Anda.</p>
+          <button class="btn btn--primary" id="reset-filters">Reset Filter</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="main-footer"></div>
+
+  <!-- Scripts -->
+  <script src="/js/config.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/catalog.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNavbar();
+      renderFooter();
+      CatalogController.init();
+    });
+  </script>
+</body>
+</html>

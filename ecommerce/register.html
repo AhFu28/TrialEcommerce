@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar — Faiz Store</title>
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  
+  <div class="auth-layout">
+    <div class="auth-image" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80')">
+      <div class="auth-image__content fade-in">
+        <h1 class="auth-image__title">Faiz Store</h1>
+        <p class="auth-image__subtitle" data-i18n="footer_tagline">Kebutuhan Sehari-hari & Gaya Hidup Anda</p>
+      </div>
+    </div>
+
+    <div class="auth-panel">
+      <!-- Language toggle -->
+      <div style="position:absolute; top:var(--space-6); right:var(--space-8);">
+        <button class="lang-toggle" id="lang-toggle">EN</button>
+      </div>
+
+      <div class="auth-panel__header fade-in">
+        <a href="/" style="display:inline-block; margin-bottom:var(--space-6); font-family:var(--font-heading); font-weight:bold; color:var(--color-text-primary); text-decoration:none; font-size:var(--text-xl);">Faiz Store.</a>
+        <h2 class="auth-panel__title" data-i18n="register_title">Buat Akun</h2>
+        <p class="auth-panel__subtitle" data-i18n="register_subtitle">Daftar untuk mulai berbelanja</p>
+      </div>
+
+      <form class="auth-form fade-in" id="register-form">
+        <div style="display:flex; gap:16px;">
+          <div class="auth-form-group" style="flex:1;">
+            <label for="firstName" data-i18n="first_name">Nama Depan</label>
+            <input type="text" id="firstName" required>
+          </div>
+          <div class="auth-form-group" style="flex:1;">
+            <label for="lastName" data-i18n="last_name">Nama Belakang</label>
+            <input type="text" id="lastName">
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="email" data-i18n="email">Email</label>
+          <input type="email" id="email" required placeholder="nama@email.com">
+        </div>
+        
+        <div class="auth-form-group">
+          <label for="password" data-i18n="password">Kata Sandi</label>
+          <input type="password" id="password" required>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="confirmPassword" data-i18n="confirm_password">Konfirmasi Kata Sandi</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
+
+        <button type="submit" class="btn btn--primary" style="margin-top:var(--space-2);" data-i18n="nav_register">Daftar</button>
+        
+        <div id="register-error" style="color:var(--color-error); font-size:var(--text-sm); text-align:center; display:none; margin-top:var(--space-2);"></div>
+
+        <div class="auth-divider" data-i18n="or">atau</div>
+
+        <div class="google-btn-wrapper" id="google-signup-btn"></div>
+      </form>
+
+      <div class="auth-footer fade-in">
+        <span data-i18n="have_account">Sudah punya akun?</span> 
+        <a href="/login.html" class="auth-link" data-i18n="nav_login">Masuk</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      FaizI18n.init();
+      
+      const form = document.getElementById('register-form');
+      const errorDiv = document.getElementById('register-error');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+          errorDiv.textContent = FaizI18n.currentLang === 'id' ? 'Kata sandi tidak cocok' : 'Passwords do not match';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        const res = FaizAuth.register(email, password, firstName, lastName);
+        if (res.success) {
+          window.location.href = '/';
+        } else {
+          errorDiv.textContent = res.message;
+          errorDiv.style.display = 'block';
+        }
+      });
+
+      // Initialize Google Sign-In
+      window.onload = () => {
+        FaizAuth.initGoogleSignIn('google-signup-btn', (user) => {
+          window.location.href = '/';
+        });
+      };
+    });
+  </script>
+</body>
+</html>

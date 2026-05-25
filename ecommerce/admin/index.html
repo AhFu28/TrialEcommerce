@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Faiz Store</title>
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+
+  <button class="admin-sidebar-toggle" id="mobile-sidebar-toggle">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <a href="/admin/index.html" class="admin-sidebar__logo">
+      <div class="admin-sidebar__logo-icon">F</div>
+      <div class="admin-sidebar__logo-text">Faiz Store</div>
+      <div class="admin-sidebar__logo-badge">Admin</div>
+    </a>
+
+    <nav class="admin-sidebar__nav">
+      <div class="admin-sidebar__section-label">Overview</div>
+      <button class="admin-nav-item active" data-section="dashboard">
+        <span class="admin-nav-icon">📊</span> Dashboard
+      </button>
+
+      <div class="admin-sidebar__section-label">Catalog</div>
+      <button class="admin-nav-item" data-section="products">
+        <span class="admin-nav-icon">📦</span> Products
+      </button>
+      <button class="admin-nav-item" data-section="highlights">
+        <span class="admin-nav-icon">⭐</span> Highlights
+      </button>
+
+      <div class="admin-sidebar__section-label">Sales & Marketing</div>
+      <button class="admin-nav-item" data-section="pricing">
+        <span class="admin-nav-icon">💰</span> Pricing & Stock
+      </button>
+      <button class="admin-nav-item" data-section="promos">
+        <span class="admin-nav-icon">🏷️</span> Promos
+      </button>
+      <button class="admin-nav-item" data-section="bundles">
+        <span class="admin-nav-icon">🎁</span> Bundles
+      </button>
+      <button class="admin-nav-item" data-section="orders">
+        <span class="admin-nav-icon">🛒</span> Orders
+      </button>
+
+      <div class="admin-sidebar__section-label">Analytics</div>
+      <button class="admin-nav-item" data-section="performance">
+        <span class="admin-nav-icon">📈</span> Performance
+      </button>
+    </nav>
+
+    <div class="admin-sidebar__footer">
+      <div class="admin-user-info">
+        <div class="admin-user-avatar">A</div>
+        <div>
+          <div class="admin-user-name">Admin User</div>
+          <div class="admin-user-role">Administrator</div>
+        </div>
+      </div>
+      <button class="admin-logout-btn" id="admin-logout">
+        <span class="admin-nav-icon">🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <header class="admin-header">
+      <h1 class="admin-header__title" id="page-title">Dashboard</h1>
+      <div class="admin-header__actions">
+        <a href="/" target="_blank" class="admin-header__store-link">
+          <span>👁️</span> View Store
+        </a>
+      </div>
+    </header>
+
+    <div class="admin-content" id="admin-content">
+      <!-- Sections injected via JS -->
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast-container" style="position:fixed; bottom:20px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:10px;"></div>
+
+  <!-- Modal Overlay -->
+  <div class="admin-modal-overlay" id="admin-modal-overlay">
+    <div class="admin-modal" id="admin-modal">
+      <div class="admin-modal__header">
+        <h3 class="admin-modal__title" id="modal-title">Modal Title</h3>
+        <button class="admin-modal__close" id="modal-close">×</button>
+      </div>
+      <div class="admin-modal__body" id="modal-body">
+        <!-- Content injected -->
+      </div>
+      <div class="admin-modal__footer" id="modal-footer">
+        <!-- Actions injected -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin/app.js"></script>
+</body>
+</html>

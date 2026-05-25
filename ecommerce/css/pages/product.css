@@ -1,0 +1,271 @@
+/* ================================================================
+   Faiz Store — Product Page CSS
+   ================================================================ */
+
+.product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+/* ── Gallery ────────────────────────────────────────────────────── */
+.product-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.gallery-main {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--color-border-light);
+}
+
+.gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.gallery-main:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-thumbs {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.gallery-thumbs::-webkit-scrollbar { height: 4px; }
+.gallery-thumbs::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+
+.thumb-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+  background: var(--color-bg-alt);
+}
+
+.thumb-btn.active {
+  border-color: var(--color-accent);
+}
+
+.thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Info ───────────────────────────────────────────────────────── */
+.product-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-breadcrumb {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+.product-breadcrumb a:hover { color: var(--color-accent); }
+
+.product-title {
+  font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
+  margin-bottom: var(--space-2);
+}
+
+.product-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.product-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.price-main {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
+}
+
+.price-old {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+.price-save {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+  font-weight: var(--font-semi);
+  background: var(--color-error-bg);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Variants */
+.variant-group {
+  margin-bottom: var(--space-6);
+}
+
+.variant-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semi);
+  margin-bottom: var(--space-3);
+  display: block;
+}
+
+.variant-options {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.variant-btn {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.variant-btn:hover {
+  border-color: var(--color-text-primary);
+}
+
+.variant-btn.active {
+  border-color: var(--color-text-primary);
+  background: var(--color-text-primary);
+  color: white;
+}
+
+/* Actions */
+.product-actions {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  height: 52px;
+  background: var(--color-surface);
+}
+
+.qty-btn {
+  width: 44px;
+  height: 100%;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+}
+.qty-btn:hover { color: var(--color-text-primary); background: var(--color-bg-alt); }
+
+.qty-input {
+  width: 50px;
+  text-align: center;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  background: transparent;
+  outline: none;
+}
+
+.btn-add-cart {
+  flex: 1;
+  height: 52px;
+}
+
+/* Tabs */
+.product-tabs {
+  margin-top: auto;
+}
+
+.tab-nav {
+  display: flex;
+  gap: var(--space-6);
+  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: var(--space-5);
+  overflow-x: auto;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  padding: 0.5rem 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--color-text-primary); }
+.tab-btn.active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+.tab-content {
+  display: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.tab-content.active { display: block; }
+.tab-content ul { list-style: disc; padding-left: 1.5rem; margin-top: 1rem; }
+
+/* ── Bundles ────────────────────────────────────────────────────── */
+.bundle-section {
+  margin-bottom: var(--space-8);
+  padding: var(--space-5);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-accent-light);
+}
+
+.bundle-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semi);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .product-layout { grid-template-columns: 1fr; gap: var(--space-6); }
+}
+
+@media (max-width: 480px) {
+  .product-actions { flex-direction: column; }
+  .qty-control { width: 100%; justify-content: space-between; }
+  .qty-input { flex: 1; }
+}
