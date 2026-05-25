@@ -1,101 +1,34 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produk — Faiz Store</title>
-  <meta name="description" content="Detail produk Faiz Store">
+  <title>Product Details — Lumina Commerce</title>
+  
   <link rel="stylesheet" href="./css/design-system.css">
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/pages/product.css">
 </head>
 <body>
+  <!-- Navbar -->
   <div id="main-navbar"></div>
 
-  <main class="container fade-in">
-    <div id="product-container" class="product-layout" style="display:none;">
-      
-      <!-- Gallery -->
-      <div class="product-gallery">
-        <div class="gallery-main">
-          <img id="main-img" src="" alt="Product">
-        </div>
-        <div class="gallery-thumbs" id="thumb-container">
-          <!-- Thumbs injected via JS -->
-        </div>
-      </div>
-
-      <!-- Info -->
-      <div class="product-info">
-        <div class="product-breadcrumb" id="product-breadcrumb">
-          <!-- Breadcrumb injected -->
-        </div>
-
-        <h1 class="product-title" id="product-title">Loading...</h1>
-        
-        <div class="product-meta">
-          <div class="text-sm">
-            <span style="color:#F5A623">★★★★★</span>
-            <span class="text-muted ml-1" id="product-reviews">(4.8 / 120 ulasan)</span>
-          </div>
-          <div id="product-stock-badge"></div>
-        </div>
-
-        <div class="product-price-wrap" id="product-price-wrap">
-          <!-- Prices injected -->
-        </div>
-
-        <!-- Variants -->
-        <div id="variants-container"></div>
-
-        <!-- Bundles -->
-        <div id="bundle-container"></div>
-
-        <!-- Actions -->
-        <div class="product-actions">
-          <div class="qty-control">
-            <button class="qty-btn" id="qty-minus">−</button>
-            <input type="number" class="qty-input" id="qty-input" value="1" min="1" max="99">
-            <button class="qty-btn" id="qty-plus">+</button>
-          </div>
-          <button class="btn btn--primary btn-add-cart" id="btn-add-cart" data-i18n="add_to_cart">Tambah ke Keranjang</button>
-        </div>
-
-        <!-- Tabs -->
-        <div class="product-tabs">
-          <div class="tab-nav">
-            <button class="tab-btn active" data-tab="desc" data-i18n="tab_desc">Deskripsi</button>
-            <button class="tab-btn" data-tab="shipping" data-i18n="tab_shipping">Pengiriman</button>
-          </div>
-          <div class="tab-content active" id="tab-desc"></div>
-          <div class="tab-content" id="tab-shipping">
-            <p><strong>Gratis ongkir</strong> untuk pesanan di atas Rp 200.000.</p>
-            <ul>
-              <li>Reguler: 2-4 hari kerja</li>
-              <li>Sameday/Instant: Tersedia untuk area Jabodetabek</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
+  <main class="container product-container">
+    <div class="breadcrumb fade-in" id="product-breadcrumb">
+      <a href="index.html">Home</a>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      <a href="catalog.html">Catalog</a>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      <span>Loading...</span>
     </div>
 
-    <div id="product-not-found" class="empty-state hidden" style="margin-top: 100px; margin-bottom: 100px;">
-      <div class="empty-state__icon">📦</div>
-      <h3 class="empty-state__title" data-i18n="product_not_found">Produk Tidak Ditemukan</h3>
-      <a href="./catalog.html" class="btn btn--primary" style="margin-top:20px;">Kembali Belanja</a>
+    <div class="product-layout fade-in" id="product-details-container">
+      <!-- Loading State -->
+      <p style="padding: 2rem;">Loading product details...</p>
     </div>
-
-    <!-- Related Products -->
-    <section class="section" id="related-section" style="display:none; border-top: 1px solid var(--color-border-light); margin-top: 4rem; padding-top: 4rem;">
-      <div class="section__header">
-        <h2 class="section__title" data-i18n="related_products">Mungkin Anda Suka</h2>
-      </div>
-      <div class="products-grid" id="related-grid"></div>
-    </section>
-
   </main>
 
+  <!-- Footer -->
   <div id="main-footer"></div>
 
   <!-- Scripts -->
@@ -104,12 +37,113 @@
   <script src="./js/store.js"></script>
   <script src="./js/auth.js"></script>
   <script src="./js/main.js"></script>
-  <script src="./js/product.js"></script>
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      renderNavbar();
-      renderFooter();
-      ProductController.init();
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id');
+      const container = document.getElementById('product-details-container');
+      const breadcrumb = document.getElementById('product-breadcrumb');
+
+      if (!productId) {
+        container.innerHTML = '<p style="padding:2rem">Product ID is missing.</p>';
+        return;
+      }
+
+      const product = Store.getProductById(productId);
+
+      if (!product) {
+        container.innerHTML = '<p style="padding:2rem">Product not found.</p>';
+        return;
+      }
+
+      // Update Breadcrumb
+      breadcrumb.innerHTML = `
+        <a href="index.html">Home</a>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="catalog.html">Categories</a>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span>${product.name}</span>
+      `;
+
+      // Render Product
+      container.innerHTML = `
+        <div class="product-gallery">
+          <div class="gallery-main">
+            <img src="${product.image}" alt="${product.name}">
+            <div class="gallery-main-badges">
+              ${product.isOfficial ? '<span class="badge badge--pill badge--official">Official Store</span>' : ''}
+              ${product.isBestSeller ? '<span class="badge badge--pill badge--bestseller">Best Seller</span>' : ''}
+            </div>
+          </div>
+          <div class="gallery-thumbs">
+            <div class="gallery-thumb active"><img src="${product.image}" alt="Thumb 1"></div>
+            <div class="gallery-thumb"><img src="${product.image}" alt="Thumb 2" style="filter: brightness(0.8)"></div>
+            <div class="gallery-thumb"><img src="${product.image}" alt="Thumb 3" style="filter: brightness(0.6)"></div>
+            <div class="gallery-thumb"><img src="${product.image}" alt="Thumb 4" style="filter: brightness(0.4)"></div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <h1 class="product-title">${product.name}</h1>
+          <div class="product-rating">
+            <span class="product-rating-stars">★★★★★</span>
+            <span>4.8 (1,245 reviews) &nbsp;&bull;&nbsp; 10k+ Sold</span>
+          </div>
+
+          <div class="product-price-box">
+            <div class="product-price-row">
+              <span class="product-price-current">${Store.formatCurrency(product.price)}</span>
+              <span class="product-price-old">${Store.formatCurrency(product.price * 1.33)}</span>
+              <span class="badge badge--discount">25% OFF</span>
+            </div>
+            <div class="product-delivery-info">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Free shipping to <strong>Jakarta</strong> via Standard Delivery
+            </div>
+          </div>
+
+          <div class="product-options">
+            <div class="product-option-title">Color Family</div>
+            <div class="color-options">
+              <div class="color-option active" style="background-color: #111;"></div>
+              <div class="color-option" style="background-color: #e0e0e0;"></div>
+              <div class="color-option" style="background-color: #004488;"></div>
+            </div>
+
+            <div class="product-option-title">Quantity</div>
+            <div class="product-qty-row">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="document.getElementById('qty').value = Math.max(1, parseInt(document.getElementById('qty').value) - 1)">-</button>
+                <input type="text" id="qty" class="qty-input" value="1" readonly>
+                <button class="qty-btn" onclick="document.getElementById('qty').value = parseInt(document.getElementById('qty').value) + 1">+</button>
+              </div>
+              <span class="qty-stock">Stock: ${product.stock} pieces</span>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn btn--outline-primary btn--lg" onclick="Store.addToCart('${product.id}')">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Add to Cart
+            </button>
+            <button class="btn btn--primary btn--lg" onclick="Store.addToCart('${product.id}'); window.location.href='cart.html';">Buy Now</button>
+          </div>
+
+          <div class="warranty-banner">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div>
+              <div class="warranty-title">1 Year Official Warranty</div>
+              <div class="warranty-desc">100% Original Guarantee. 7 Days Easy Return.</div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-border-light);">
+            <h3 class="product-option-title">Description</h3>
+            <p style="color: var(--color-text-secondary); font-size: 0.9375rem; white-space: pre-wrap;">${product.description || 'No description available.'}</p>
+          </div>
+        </div>
+      `;
     });
   </script>
 </body>

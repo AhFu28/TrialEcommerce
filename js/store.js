@@ -1,5 +1,5 @@
 /**
- * Faiz Store — Central Data Store (localStorage)
+ * Lumina Commerce — Central Data Store (localStorage)
  * All product, order, promo, bundle, and config data lives here.
  */
 
@@ -525,7 +525,7 @@ const FaizStore = {
     }
     this.set(this.KEYS.ANALYTICS, analytics);
 
-    console.log("✅ Faiz Store: seed data loaded.");
+    console.log("✅ Lumina Commerce: seed data loaded.");
   },
 };
 

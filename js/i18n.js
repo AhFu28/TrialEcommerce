@@ -1,5 +1,5 @@
 /**
- * Faiz Store — Bilingual i18n System (EN / ID)
+ * Lumina Commerce — Bilingual i18n System (EN / ID)
  */
 
 const FAIZ_I18N = {
@@ -88,9 +88,9 @@ const FAIZ_I18N = {
 
     // Auth
     login_title: "Welcome Back",
-    login_subtitle: "Sign in to your Faiz Store account",
+    login_subtitle: "Sign in to your Lumina Commerce account",
     register_title: "Create Account",
-    register_subtitle: "Join Faiz Store today",
+    register_subtitle: "Join Lumina Commerce today",
     email_label: "Email",
     password_label: "Password",
     confirm_password: "Confirm Password",
@@ -255,9 +255,9 @@ const FAIZ_I18N = {
 
     // Auth
     login_title: "Selamat Datang Kembali",
-    login_subtitle: "Masuk ke akun Faiz Store Anda",
+    login_subtitle: "Masuk ke akun Lumina Commerce Anda",
     register_title: "Buat Akun",
-    register_subtitle: "Bergabung dengan Faiz Store hari ini",
+    register_subtitle: "Bergabung dengan Lumina Commerce hari ini",
     email_label: "Email",
     password_label: "Kata Sandi",
     confirm_password: "Konfirmasi Kata Sandi",
@@ -340,7 +340,7 @@ const FAIZ_I18N = {
 
 // ── i18n Engine ─────────────────────────────────────────────────────────────
 const FaizI18n = {
-  currentLang: localStorage.getItem("faiz_lang") || FAIZ_CONFIG.DEFAULT_LANG,
+  currentLang: localStorage.getItem("faiz_lang") || STORE_CONFIG.DEFAULT_LANG,
 
   t(key, vars = {}) {
     const dict = FAIZ_I18N[this.currentLang] || FAIZ_I18N["id"];

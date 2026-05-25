@@ -1,5 +1,5 @@
 /**
- * Faiz Store — Authentication (Email/Password + Google Identity Services)
+ * Lumina Commerce — Authentication (Email/Password + Google Identity Services)
  */
 
 const FaizAuth = {
@@ -98,7 +98,7 @@ const FaizAuth = {
       return;
     }
     google.accounts.id.initialize({
-      client_id: FAIZ_CONFIG.GOOGLE_CLIENT_ID,
+      client_id: STORE_CONFIG.GOOGLE_CLIENT_ID,
       callback: (response) => this.handleGoogleCredential(response, onSuccess, isAdmin),
     });
     google.accounts.id.renderButton(document.getElementById(buttonId), {
@@ -117,7 +117,7 @@ const FaizAuth = {
 
     if (isAdmin) {
       // Check if email is in admin list
-      if (FAIZ_CONFIG.ADMIN_EMAILS.length > 0 && !FAIZ_CONFIG.ADMIN_EMAILS.includes(email)) {
+      if (STORE_CONFIG.ADMIN_EMAILS.length > 0 && !STORE_CONFIG.ADMIN_EMAILS.includes(email)) {
         alert("Access denied. This Google account is not authorized as admin.");
         return;
       }
@@ -150,7 +150,7 @@ const FaizAuth = {
 
   // ── Admin Password Login ─────────────────────────────────────────
   adminLogin(password) {
-    if (password === FAIZ_CONFIG.ADMIN_PASSWORD) {
+    if (password === STORE_CONFIG.ADMIN_PASSWORD) {
       this.setAdminSession({ email: "admin", name: "Admin", provider: "password", loginAt: new Date().toISOString() });
       return { success: true };
     }

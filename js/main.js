@@ -1,5 +1,5 @@
 /**
- * Faiz Store — main.js
+ * Lumina Commerce — main.js
  * Shared behavior: navbar, scroll effects, intersection observer, init
  */
 
@@ -122,8 +122,10 @@ function renderNavbar() {
     <nav class="navbar" role="navigation">
       <div class="container navbar__inner">
         <a href="${basePath}index.html" class="navbar__logo">
-          <div class="navbar__logo-icon">F</div>
-          <span class="navbar__logo-text">Faiz <span>Store</span></span>
+          <div class="navbar__logo-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <span class="navbar__logo-text">Lumina <span>Commerce</span></span>
         </a>
 
         <div class="navbar__links">
@@ -134,8 +136,17 @@ function renderNavbar() {
           <a href="${basePath}contact.html" class="navbar__link" data-i18n="nav_contact">Kontak</a>
         </div>
 
+        <div class="navbar__search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search products..." id="navbar-search-input">
+        </div>
+
         <div class="navbar__actions">
-          <button class="lang-toggle" id="lang-toggle">EN</button>
+          <button class="navbar__btn-icon" onclick="history.back()" aria-label="Go Back" title="Go Back">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          
+          <button class="lang-toggle" id="lang-toggle" style="display:none;">EN</button>
 
           <a href="${basePath}cart.html" class="navbar__cart" id="navbar-cart-link" aria-label="Cart">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -200,10 +211,12 @@ function renderFooter() {
         <div class="footer__grid">
           <div class="footer__brand">
             <a href="${basePath}index.html" class="footer__logo">
-              <div class="footer__logo-icon">F</div>
-              <span class="footer__logo-text">Faiz Store</span>
+              <div class="footer__logo-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <span class="footer__logo-text">Lumina Commerce</span>
             </a>
-            <p class="footer__desc" data-i18n="footer_tagline">Kebutuhan Sehari-hari & Gaya Hidup Anda</p>
+            <p class="footer__desc" data-i18n="footer_tagline">Professional Quality, Delivered Daily</p>
             <div class="footer__social">
               <a href="#" class="footer__social-link" aria-label="Instagram">📸</a>
               <a href="#" class="footer__social-link" aria-label="WhatsApp">💬</a>
@@ -242,16 +255,12 @@ function renderFooter() {
           </div>
         </div>
         <div class="footer__bottom">
-          <p class="footer__copyright">
-            &copy; ${new Date().getFullYear()} Faiz Store. <span data-i18n="footer_rights">Hak cipta dilindungi.</span>
-          </p>
-          <div class="footer__payment">
-            <span class="payment-icon">Visa</span>
-            <span class="payment-icon">Mastercard</span>
-            <span class="payment-icon">GoPay</span>
-            <span class="payment-icon">OVO</span>
-            <span class="payment-icon">DANA</span>
-            <span class="payment-icon">BCA</span>
+          <p class="footer__copy">&copy; 2024 Lumina Commerce. Professional Official Webstore.</p>
+          <div class="footer__legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Shipping Policy</a>
+            <a href="#">Return & Refunds</a>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 /**
- * Faiz Store — Admin App
+ * Lumina Commerce — Admin App
  * Handles routing, modals, and shared admin state
  */
 
@@ -10,458 +10,371 @@ const AdminApp = {
   init() {
     // Auth Check
     if (!sessionStorage.getItem('faiz_admin_session')) {
-      window.location.href = 'login.html';
+      Auth.requireAdmin();
       return;
     }
-
-    this.bindEvents();
-    this.renderSection('dashboard');
-  },
-
-  bindEvents() {
-    // Navigation
-    document.querySelectorAll('.admin-nav-item').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
-        const target = e.currentTarget;
-        target.classList.add('active');
-        
-        const section = target.dataset.section;
-        this.renderSection(section);
-        
-        // Update Title
-        document.getElementById('page-title').textContent = target.textContent.trim().replace(/^.+ /, '');
-
-        // Close mobile sidebar
-        document.getElementById('admin-sidebar').classList.remove('mobile-open');
-      });
-    });
-
-    // Logout
-    document.getElementById('admin-logout').addEventListener('click', () => {
-      sessionStorage.removeItem('faiz_admin_session');
-      window.location.href = 'login.html';
-    });
-
-    // Mobile Sidebar Toggle
-    const toggle = document.getElementById('mobile-sidebar-toggle');
-    if (toggle) {
-      toggle.addEventListener('click', () => {
-        document.getElementById('admin-sidebar').classList.toggle('mobile-open');
-      });
-    }
-
-    // Modal Close
-    document.getElementById('modal-close').addEventListener('click', () => this.closeModal());
-    document.getElementById('admin-modal-overlay').addEventListener('click', (e) => {
-      if (e.target.id === 'admin-modal-overlay') this.closeModal();
-    });
-  },
-
-  renderSection(section) {
-    this.currentSection = section;
-    const content = document.getElementById('admin-content');
     
-    // Clear existing charts
-    Object.values(this.charts).forEach(c => c.destroy());
-    this.charts = {};
+    this.setupRouting();
+    this.render();
+  },
 
-    switch(section) {
-      case 'dashboard': this.renderDashboard(content); break;
-      case 'products': this.renderProducts(content); break;
-      case 'highlights': this.renderHighlights(content); break;
-      case 'pricing': this.renderPricing(content); break;
-      case 'promos': this.renderPromos(content); break;
-      case 'bundles': this.renderBundles(content); break;
-      case 'orders': this.renderOrders(content); break;
-      case 'performance': this.renderPerformance(content); break;
+  setupRouting() {
+    const navItems = document.querySelectorAll('.admin-nav__item');
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+        this.currentSection = item.dataset.target;
+        this.render();
+      });
+    });
+  },
+
+  render() {
+    const main = document.getElementById('admin-main-content');
+    switch (this.currentSection) {
+      case 'dashboard':
+        this.renderDashboard(main);
+        break;
+      case 'products':
+        this.renderProducts(main);
+        break;
+      case 'orders':
+        this.renderOrders(main);
+        break;
+      case 'inventory':
+      case 'settings':
+        main.innerHTML = `<div class="admin-header"><h1 class="admin-page-title">Coming Soon</h1></div>`;
+        break;
+      default:
+        this.renderDashboard(main);
     }
   },
 
-  showToast(message, type = 'success') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-      background: ${type === 'success' ? 'var(--color-success)' : 'var(--color-error)'};
-      color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: fadein 0.3s;
-    `;
-    toast.textContent = message;
-    container.appendChild(toast);
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transition = 'opacity 0.3s';
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
-  },
-
-  openModal(title, bodyHtml, footerHtml) {
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-body').innerHTML = bodyHtml;
-    document.getElementById('modal-footer').innerHTML = footerHtml;
-    document.getElementById('admin-modal-overlay').classList.add('open');
-  },
-
-  closeModal() {
-    document.getElementById('admin-modal-overlay').classList.remove('open');
-  },
-
-  formatMoney(num) {
-    return 'Rp ' + num.toLocaleString('id-ID');
-  },
-
-  // ==========================================
-  // DASHBOARD SECTION
-  // ==========================================
+  // ── Dashboard ────────────────────────────────────────────────────────
   renderDashboard(container) {
-    const stats = FaizStore.getAnalytics();
-    const products = FaizStore.getProducts();
-    const activeProducts = products.filter(p => p.status === 'published').length;
-    const promos = FaizStore.getPromos().filter(p => p.status === 'active').length;
+    const products = Store.getAllProducts();
+    const totalProducts = products.length;
     
-    // Low stock
-    const lowStock = products.filter(p => p.stock <= p.lowStockThreshold);
-
     container.innerHTML = `
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-page-title">Sales Performance Overview</h1>
+          <p class="admin-page-desc">Monitor your store's key metrics and product trends.</p>
+        </div>
+        <div class="admin-filter-bar">
+          <div class="admin-filter-box">
+            <input type="text" value="2023-10-01" class="admin-filter-input" style="width: 120px;">
+            <input type="text" value="2023-10-31" class="admin-filter-input" style="width: 120px;">
+          </div>
+          <button class="btn-admin">Apply Filter</button>
+        </div>
+      </div>
+
       <div class="kpi-grid">
         <div class="kpi-card">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Total Revenue</span>
-            <div class="kpi-card__icon kpi-icon--revenue">💰</div>
+          <div class="kpi-header">
+            <div class="kpi-title">Total Revenue</div>
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
           </div>
-          <div class="kpi-card__value">${this.formatMoney(stats.totalRevenue)}</div>
+          <div class="kpi-value">$124,500.00</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> +12.5% vs last month</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Total Orders</span>
-            <div class="kpi-card__icon kpi-icon--orders">🛒</div>
+          <div class="kpi-header">
+            <div class="kpi-title">Orders</div>
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
           </div>
-          <div class="kpi-card__value">${stats.totalOrders}</div>
+          <div class="kpi-value">1,248</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> +5.2% vs last month</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Active Products</span>
-            <div class="kpi-card__icon kpi-icon--products">📦</div>
+          <div class="kpi-header">
+            <div class="kpi-title">Average Order Value</div>
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
           </div>
-          <div class="kpi-card__value">${activeProducts}</div>
+          <div class="kpi-value">$99.75</div>
+          <div class="kpi-trend negative"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 18l-9.5-9.5-5 5L1 6"/><polyline points="17 18 23 18 23 12"/></svg> -1.2% vs last month</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Active Promos</span>
-            <div class="kpi-card__icon kpi-icon--promos">🏷️</div>
+          <div class="kpi-header">
+            <div class="kpi-title">Customer Conversion Rate</div>
+            <div class="kpi-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
           </div>
-          <div class="kpi-card__value">${promos}</div>
+          <div class="kpi-value">3.8%</div>
+          <div class="kpi-trend positive"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg> +0.4% vs last month</div>
         </div>
       </div>
 
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div class="chart-card__header">
-            <h3 class="chart-card__title">Revenue (Last 7 Days)</h3>
+      <div class="dashboard-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Sales Over Time</div>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
           </div>
-          <canvas id="chart-revenue" height="250"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-card__header">
-            <h3 class="chart-card__title">Top Categories</h3>
+          <div class="chart-placeholder">
+            <div class="chart-bar active" style="height: 60%;"></div>
+            <div class="chart-bar" style="height: 40%;"></div>
+            <div class="chart-bar active" style="height: 80%;"></div>
+            <div class="chart-bar" style="height: 50%;"></div>
+            <div class="chart-bar active" style="height: 95%;"></div>
+            <div class="chart-bar" style="height: 30%;"></div>
           </div>
-          <canvas id="chart-categories" height="250"></canvas>
-        </div>
-      </div>
-
-      <div class="charts-grid">
-        <div class="admin-table-wrap">
-          <div class="admin-table-header">
-            <h3 class="admin-table-header__title">Recent Orders</h3>
+          <div style="display:flex; justify-content:space-around; margin-top: 10px; font-size: 0.75rem; color: var(--admin-text-secondary);">
+            <span>Oct 01</span><span>Oct 05</span><span>Oct 10</span><span>Oct 15</span><span>Oct 20</span><span>Oct 25</span>
           </div>
-          <table class="admin-table">
-            <thead><tr><th>ID</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td colspan="4" style="text-align:center;">No recent orders (Demo data)</td></tr>
-            </tbody>
-          </table>
         </div>
-        
-        <div class="chart-card">
-          <h3 class="chart-card__title" style="margin-bottom:var(--space-4)">Low Stock Alerts</h3>
-          ${lowStock.length === 0 ? '<p class="text-sm text-secondary">All products are well stocked.</p>' : ''}
-          ${lowStock.map(p => `
-            <div class="low-stock-item">
-              <img src="${p.image}">
-              <div style="flex:1">
-                <div class="text-sm font-medium">${p.nameEn}</div>
-                <div class="text-xs text-secondary">Threshold: ${p.lowStockThreshold}</div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Top Performing Products</div>
+            <a href="#" style="color: var(--admin-primary); font-size: 0.8125rem; font-weight: 600; text-decoration: none;">View All</a>
+          </div>
+          <div class="top-products-list">
+            ${products.slice(0,4).map(p => `
+              <div class="top-product-item">
+                <img src="${p.image}" class="top-product-img">
+                <div class="top-product-info">
+                  <div class="top-product-name">${p.name.substring(0, 20)}...</div>
+                  <div class="top-product-sales">${p.stock * 3} units sold</div>
+                </div>
+                <div class="top-product-rev">$${(p.price * 3.5).toLocaleString()}</div>
               </div>
-              <div class="low-stock-count">${p.stock} left</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-
-    // Render Charts
-    setTimeout(() => {
-      const ctxRev = document.getElementById('chart-revenue').getContext('2d');
-      this.charts.rev = new Chart(ctxRev, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{ label: 'Revenue (Rp)', data: [1500000, 2100000, 1800000, 2900000, 1200000, 4100000, 3200000], borderColor: '#C8A882', tension: 0.4 }]
-        }
-      });
-
-      const ctxCat = document.getElementById('chart-categories').getContext('2d');
-      this.charts.cat = new Chart(ctxCat, {
-        type: 'doughnut',
-        data: {
-          labels: ['Decor', 'Daily', 'Kitchen', 'Bath'],
-          datasets: [{ data: [35, 25, 20, 20], backgroundColor: ['#C8A882', '#4A90E2', '#4CAF50', '#F5A623'] }]
-        }
-      });
-    }, 100);
-  },
-
-  // ==========================================
-  // PRODUCTS SECTION
-  // ==========================================
-  renderProducts(container) {
-    const products = FaizStore.getProducts();
-    
-    let html = `
-      <div class="admin-table-wrap">
-        <div class="admin-table-header">
-          <div class="admin-search">
-            <span>🔍</span>
-            <input type="text" id="prod-search" placeholder="Search products...">
-          </div>
-          <div class="admin-table-header__actions">
-            <button class="btn btn--primary btn--sm" id="btn-add-product">Add Product</button>
+            `).join('')}
           </div>
         </div>
-        <table class="admin-table" id="prod-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${products.map(p => this.getProductRowHtml(p)).join('')}
-          </tbody>
-        </table>
       </div>
-    `;
-    container.innerHTML = html;
 
-    // Search filter
-    document.getElementById('prod-search').addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase();
-      const rows = document.querySelectorAll('#prod-table tbody tr');
-      rows.forEach(row => {
-        const name = row.cells[1].textContent.toLowerCase();
-        row.style.display = name.includes(q) ? '' : 'none';
-      });
-    });
-
-    // Add Product
-    document.getElementById('btn-add-product').addEventListener('click', () => this.openProductModal(null));
-
-    // Edit/Delete binds
-    document.getElementById('prod-table').addEventListener('click', (e) => {
-      const editBtn = e.target.closest('.edit-btn');
-      if (editBtn) this.openProductModal(editBtn.dataset.id);
-      
-      const delBtn = e.target.closest('.del-btn');
-      if (delBtn && confirm('Are you sure you want to delete this product?')) {
-        FaizStore.deleteProduct(delBtn.dataset.id);
-        this.renderProducts(container);
-        this.showToast('Product deleted');
-      }
-    });
-  },
-
-  getProductRowHtml(p) {
-    return `
-      <tr>
-        <td><img src="${p.image}" class="admin-table__img"></td>
-        <td>
-          <div style="font-weight:var(--font-medium)">${p.nameEn}</div>
-          <div class="text-xs text-secondary">${p.nameId}</div>
-        </td>
-        <td>${p.category}</td>
-        <td>${this.formatMoney(p.price)}</td>
-        <td>
-          <span class="${p.stock <= p.lowStockThreshold ? 'text-error font-bold' : ''}">${p.stock}</span>
-        </td>
-        <td>
-          <span class="status-pill status-pill--${p.status}">${p.status}</span>
-        </td>
-        <td>
-          <div class="admin-table__actions">
-            <button class="table-action-btn edit-btn" data-id="${p.id}">Edit</button>
-            <button class="table-action-btn table-action-btn--danger del-btn" data-id="${p.id}">Delete</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  },
-
-  openProductModal(id) {
-    const p = id ? FaizStore.getProductById(id) : null;
-    const title = p ? 'Edit Product' : 'Add Product';
-    
-    const bodyHtml = `
-      <div class="form-grid-2 mb-4">
-        <div class="form-group"><label>Name (EN)</label><input type="text" id="p-name-en" value="${p?p.nameEn:''}"></div>
-        <div class="form-group"><label>Name (ID)</label><input type="text" id="p-name-id" value="${p?p.nameId:''}"></div>
-      </div>
-      <div class="form-group mb-4">
-        <label>Category</label>
-        <select id="p-cat" class="form-input" style="width:100%; padding:0.75rem; border:1px solid var(--color-border); border-radius:var(--radius-md)">
-          <option value="home-decor" ${p&&p.category==='home-decor'?'selected':''}>Home Decor</option>
-          <option value="daily-needs" ${p&&p.category==='daily-needs'?'selected':''}>Daily Needs</option>
-          <option value="kitchen" ${p&&p.category==='kitchen'?'selected':''}>Kitchen & Dining</option>
-          <option value="bedroom" ${p&&p.category==='bedroom'?'selected':''}>Bedroom & Living</option>
-          <option value="bath" ${p&&p.category==='bath'?'selected':''}>Bath & Personal Care</option>
-          <option value="cleaning" ${p&&p.category==='cleaning'?'selected':''}>Cleaning & Laundry</option>
-        </select>
-      </div>
-      <div class="form-grid-3 mb-4">
-        <div class="form-group"><label>Price (Rp)</label><input type="number" id="p-price" value="${p?p.price:''}"></div>
-        <div class="form-group"><label>Discount Price (Rp)</label><input type="number" id="p-disc" value="${p&&p.discountPrice?p.discountPrice:''}" placeholder="Optional"></div>
-        <div class="form-group"><label>Cost Price (Rp)</label><input type="number" id="p-cost" value="${p?p.costPrice:''}"></div>
-      </div>
-      <div class="form-grid-2 mb-4">
-        <div class="form-group"><label>Stock</label><input type="number" id="p-stock" value="${p?p.stock:''}"></div>
-        <div class="form-group"><label>Low Stock Threshold</label><input type="number" id="p-thresh" value="${p?p.lowStockThreshold:5}"></div>
-      </div>
-      <div class="form-group mb-4"><label>Image URL</label><input type="text" id="p-img" value="${p?p.image:''}"></div>
-      <div class="form-group mb-4">
-        <label>Status</label>
-        <select id="p-status" class="form-input" style="width:100%; padding:0.75rem; border:1px solid var(--color-border); border-radius:var(--radius-md)">
-          <option value="published" ${p&&p.status==='published'?'selected':''}>Published</option>
-          <option value="draft" ${p&&p.status==='draft'?'selected':''}>Draft</option>
-        </select>
-      </div>
-    `;
-    const footerHtml = `<button class="btn btn--primary" id="btn-save-prod">Save Product</button>`;
-    
-    this.openModal(title, bodyHtml, footerHtml);
-
-    document.getElementById('btn-save-prod').addEventListener('click', () => {
-      const prodData = {
-        nameEn: document.getElementById('p-name-en').value,
-        nameId: document.getElementById('p-name-id').value,
-        descriptionEn: p ? p.descriptionEn : 'Product description here',
-        descriptionId: p ? p.descriptionId : 'Deskripsi produk di sini',
-        category: document.getElementById('p-cat').value,
-        price: Number(document.getElementById('p-price').value),
-        costPrice: Number(document.getElementById('p-cost').value),
-        discountPrice: Number(document.getElementById('p-disc').value) || null,
-        stock: Number(document.getElementById('p-stock').value),
-        lowStockThreshold: Number(document.getElementById('p-thresh').value),
-        image: document.getElementById('p-img').value,
-        status: document.getElementById('p-status').value
-      };
-      
-      if (id) prodData.id = id;
-
-      FaizStore.saveProduct(prodData);
-      this.closeModal();
-      this.renderProducts(document.getElementById('admin-content'));
-      this.showToast('Product saved successfully');
-    });
-  },
-
-  // ==========================================
-  // HIGHLIGHTS SECTION
-  // ==========================================
-  renderHighlights(container) {
-    container.innerHTML = `
-      <div class="admin-alert admin-alert--info">
-        Highlights control the home page Hero banner and the Featured Products grid.
-      </div>
-      <p><em>(Highlights section implementation would go here — using FaizStore.updateHighlights())</em></p>
-    `;
-  },
-
-  // ==========================================
-  // PRICING SECTION
-  // ==========================================
-  renderPricing(container) {
-    const products = FaizStore.getProducts();
-    container.innerHTML = `
-      <div class="admin-table-wrap">
-        <div class="admin-table-header">
-          <h3 class="admin-table-header__title">Pricing & Margins</h3>
-          <button class="btn btn--primary btn--sm" id="btn-save-pricing">Save All Changes</button>
+      <div class="table-panel">
+        <div class="table-header">
+          <div class="panel-title">Product Performance Table</div>
+          <input type="text" class="table-search" placeholder="Search products...">
         </div>
         <table class="admin-table">
           <thead>
             <tr>
               <th>Product</th>
-              <th>Cost Price</th>
-              <th>Selling Price</th>
-              <th>Discount Price</th>
-              <th>Margin</th>
+              <th>Category</th>
+              <th>Views</th>
+              <th>Sales</th>
+              <th>Growth %</th>
             </tr>
           </thead>
           <tbody>
-            ${products.map(p => {
-              const sellPrice = p.discountPrice || p.price;
-              const margin = p.costPrice ? Math.round(((sellPrice - p.costPrice) / sellPrice) * 100) : 0;
-              let marginClass = 'good';
-              if (margin < 20) marginClass = 'low';
-              else if (margin < 50) marginClass = 'ok';
-              
-              return `
-                <tr>
-                  <td>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                      <img src="${p.image}" style="width:30px;height:30px;border-radius:4px;object-fit:cover;">
-                      <span style="font-size:12px;font-weight:500">${p.nameEn}</span>
-                    </div>
-                  </td>
-                  <td><input type="number" class="pricing-table-input" value="${p.costPrice}" data-id="${p.id}" data-field="costPrice"></td>
-                  <td><input type="number" class="pricing-table-input" value="${p.price}" data-id="${p.id}" data-field="price"></td>
-                  <td><input type="number" class="pricing-table-input" value="${p.discountPrice||''}" data-id="${p.id}" data-field="discountPrice"></td>
-                  <td><span class="margin-pill margin-pill--${marginClass}">${margin}%</span></td>
-                </tr>
-              `;
-            }).join('')}
+            ${products.slice(0,5).map(p => `
+              <tr>
+                <td>
+                  <div class="td-product">
+                    <img src="${p.image}">
+                    ${p.name.substring(0,25)}...
+                  </div>
+                </td>
+                <td style="color: var(--admin-text-secondary);">${p.category}</td>
+                <td>${(Math.random() * 15000 + 1000).toFixed(0)}</td>
+                <td style="font-weight: 600;">${(Math.random() * 500 + 50).toFixed(0)}</td>
+                <td><span class="growth-badge">↑ ${(Math.random() * 20 + 2).toFixed(1)}%</span></td>
+              </tr>
+            `).join('')}
           </tbody>
         </table>
       </div>
     `;
-
-    document.getElementById('btn-save-pricing').addEventListener('click', () => {
-      // In a real app we'd batch update. Here we just show success since it's a demo
-      this.showToast('Pricing changes saved');
-    });
   },
 
-  // ==========================================
-  // PROMOS & BUNDLES (Placeholders for brevity)
-  // ==========================================
-  renderPromos(container) {
-    container.innerHTML = `<div class="admin-table-wrap" style="padding:20px;">Promos management goes here (FaizStore.getPromos)</div>`;
+  // ── Products ────────────────────────────────────────────────────────
+  renderProducts(container) {
+    const products = Store.getAllProducts();
+    
+    container.innerHTML = `
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-page-title">Product Catalog</h1>
+          <p class="admin-page-desc">Manage your products, pricing, and inventory.</p>
+        </div>
+        <button class="btn-admin" onclick="AdminApp.showProductModal()">+ Add New Product</button>
+      </div>
+
+      <div class="table-panel">
+        <div class="table-header">
+          <input type="text" class="table-search" placeholder="Search catalog...">
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Product Details</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${products.map(p => `
+              <tr>
+                <td>
+                  <div class="td-product">
+                    <img src="${p.image}">
+                    <div>
+                      <div style="font-weight: 600; font-size: 0.875rem;">${p.name}</div>
+                      <div style="font-size: 0.75rem; color: var(--admin-text-secondary); margin-top:2px;">ID: ${p.id}</div>
+                    </div>
+                  </div>
+                </td>
+                <td style="font-weight: 600;">${Store.formatCurrency(p.price)}</td>
+                <td>
+                  <span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600; background-color: ${p.stock > 10 ? '#E5F6EE' : '#FFEEE8'}; color: ${p.stock > 10 ? 'var(--admin-primary)' : '#FF5722'};">${p.stock} in stock</span>
+                </td>
+                <td>${p.category}</td>
+                <td>
+                  <button class="btn-admin btn-admin--outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="AdminApp.showProductModal('${p.id}')">Edit</button>
+                  <button class="btn-admin" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; background-color: #D32F2F;" onclick="AdminApp.deleteProduct('${p.id}')">Delete</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
   },
-  renderBundles(container) {
-    container.innerHTML = `<div class="admin-table-wrap" style="padding:20px;">Bundles management goes here (FaizStore.getBundles)</div>`;
+
+  // ── Product Modal (Add/Edit) ──────────────────────────────────────
+  showProductModal(productId = null) {
+    const product = productId ? Store.getProductById(productId) : null;
+    const isEdit = !!product;
+
+    const main = document.getElementById('admin-main-content');
+    
+    main.innerHTML = `
+      <div class="admin-header" style="margin-bottom: 1.5rem;">
+        <div>
+          <h1 class="admin-page-title">${isEdit ? 'Edit Product' : 'Add New Product'}</h1>
+          <p class="admin-page-desc">Input product details to list in the catalog.</p>
+        </div>
+        <div style="display:flex; gap: 1rem;">
+          <button class="btn-admin btn-admin--outline" onclick="AdminApp.render()">Discard</button>
+          <button class="btn-admin" onclick="AdminApp.saveProduct('${productId || ''}')">Save Product</button>
+        </div>
+      </div>
+
+      <div class="pm-layout">
+        <div class="pm-col-left">
+          <div class="pm-card">
+            <h2 class="pm-card-title">Basic Information</h2>
+            <div class="pm-group">
+              <label class="pm-label">Product Name</label>
+              <input type="text" id="pm-name" class="pm-input" placeholder="e.g., Premium Ergonomic Chair" value="${isEdit ? product.name : ''}">
+            </div>
+            <div class="pm-group">
+              <label class="pm-label">Description</label>
+              <textarea id="pm-desc" class="pm-textarea" placeholder="Detailed product description...">${isEdit ? product.description : ''}</textarea>
+            </div>
+          </div>
+          
+          <div class="pm-row">
+            <div class="pm-card">
+              <h2 class="pm-card-title">Pricing</h2>
+              <div class="pm-group">
+                <label class="pm-label">Regular Price</label>
+                <input type="number" id="pm-price" class="pm-input" placeholder="$ 0.00" value="${isEdit ? product.price : ''}">
+              </div>
+            </div>
+            <div class="pm-card">
+              <h2 class="pm-card-title">Inventory</h2>
+              <div class="pm-group">
+                <label class="pm-label">Stock Quantity</label>
+                <input type="number" id="pm-stock" class="pm-input" placeholder="0" value="${isEdit ? product.stock : ''}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pm-col-right">
+          <div class="pm-card">
+            <h2 class="pm-card-title">Product Media</h2>
+            <div class="pm-upload-box">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <div>Click to upload image</div>
+              <div style="font-size: 0.75rem; margin-top: 4px;">SVG, PNG, JPG or GIF (max. 800x400px)</div>
+            </div>
+            <div class="pm-group" style="margin-top: 1rem;">
+              <label class="pm-label">Or Image URL</label>
+              <input type="text" id="pm-image" class="pm-input" placeholder="https://..." value="${isEdit ? product.image : ''}">
+            </div>
+          </div>
+
+          <div class="pm-card">
+            <h2 class="pm-card-title">Organization</h2>
+            <div class="pm-group">
+              <label class="pm-label">Category</label>
+              <select id="pm-category" class="pm-input">
+                <option value="home-decor" ${isEdit && product.category === 'home-decor' ? 'selected' : ''}>Home Decor</option>
+                <option value="daily-needs" ${isEdit && product.category === 'daily-needs' ? 'selected' : ''}>Daily Needs</option>
+                <option value="kitchen" ${isEdit && product.category === 'kitchen' ? 'selected' : ''}>Kitchen & Dining</option>
+                <option value="bedroom" ${isEdit && product.category === 'bedroom' ? 'selected' : ''}>Bedroom</option>
+                <option value="bath" ${isEdit && product.category === 'bath' ? 'selected' : ''}>Bath & Body</option>
+              </select>
+            </div>
+            <div class="pm-group" style="margin-top: 1.5rem;">
+              <label class="pm-label" style="display:flex; align-items:center; gap:0.5rem;">
+                <input type="checkbox" id="pm-official" ${isEdit && product.isOfficial ? 'checked' : ''}>
+                Official Store Item
+              </label>
+              <label class="pm-label" style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+                <input type="checkbox" id="pm-bestseller" ${isEdit && product.isBestSeller ? 'checked' : ''}>
+                Best Seller
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   },
+
+  saveProduct(productId) {
+    const name = document.getElementById('pm-name').value;
+    const desc = document.getElementById('pm-desc').value;
+    const price = parseFloat(document.getElementById('pm-price').value);
+    const stock = parseInt(document.getElementById('pm-stock').value, 10);
+    const image = document.getElementById('pm-image').value || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80';
+    const category = document.getElementById('pm-category').value;
+    const isOfficial = document.getElementById('pm-official').checked;
+    const isBestSeller = document.getElementById('pm-bestseller').checked;
+
+    if (!name || isNaN(price)) {
+      alert("Name and Price are required!");
+      return;
+    }
+
+    if (productId) {
+      Store.updateProduct(productId, { name, description: desc, price, stock, image, category, isOfficial, isBestSeller });
+    } else {
+      Store.addProduct({ name, description: desc, price, stock, image, category, isOfficial, isBestSeller });
+    }
+
+    this.currentSection = 'products';
+    this.render();
+  },
+
+  deleteProduct(id) {
+    if (confirm("Are you sure you want to delete this product?")) {
+      Store.deleteProduct(id);
+      this.render();
+    }
+  },
+
+  // ── Orders (Dummy view) ───────────────────────────────────────────
   renderOrders(container) {
-    container.innerHTML = `<div class="admin-table-wrap" style="padding:20px;">Order history table goes here</div>`;
-  },
-  renderPerformance(container) {
-    container.innerHTML = `<div class="admin-table-wrap" style="padding:20px;">Detailed Analytics going here</div>`;
+    container.innerHTML = `
+      <div class="admin-header">
+        <h1 class="admin-page-title">Order Management</h1>
+      </div>
+      <div class="table-panel">
+        <p>No new orders today.</p>
+      </div>
+    `;
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   AdminApp.init();
 });

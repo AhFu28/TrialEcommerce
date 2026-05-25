@@ -1,5 +1,5 @@
 /**
- * Faiz Store — Configuration
+ * Lumina Commerce — Configuration
  * ================================================
  * SETUP REQUIRED:
  * 1. Go to https://console.cloud.google.com/
@@ -10,19 +10,18 @@
  * 6. Set your admin Gmail address(es) below
  */
 
-const FAIZ_CONFIG = {
-  // ── Google OAuth (for Sign In with Google) ──────────────────────
+const STORE_CONFIG = {
+  // Authentication
   GOOGLE_CLIENT_ID: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
-
-  // ── Admin Settings ───────────────────────────────────────────────
-  ADMIN_PASSWORD: "admin123",
+  
+  // List of emails allowed to access the admin panel
   ADMIN_EMAILS: [
-    // Add your Gmail addresses that will have admin access
-    // Example: "youremail@gmail.com"
+    "admin@luminacommerce.com",
+    "faiz@example.com"
   ],
 
-  // ── Store Info ───────────────────────────────────────────────────
-  STORE_NAME: "Faiz Store",
+  // Store Configuration
+  STORE_NAME: "Lumina Commerce",
   STORE_TAGLINE_EN: "Your Everyday Lifestyle Essentials",
   STORE_TAGLINE_ID: "Kebutuhan Sehari-hari & Gaya Hidup Anda",
   STORE_EMAIL: "hello@faizstore.com",
@@ -50,4 +49,4 @@ function formatRupiah(amount) {
 }
 
 // Export for modules
-if (typeof module !== "undefined") module.exports = FAIZ_CONFIG;
+if (typeof module !== "undefined") module.exports = STORE_CONFIG;

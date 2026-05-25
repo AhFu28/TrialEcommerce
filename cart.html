@@ -1,145 +1,168 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Keranjang — Faiz Store</title>
-  <meta name="description" content="Keranjang belanja Anda di Faiz Store">
+  <title>Checkout — Lumina Commerce</title>
+  
   <link rel="stylesheet" href="./css/design-system.css">
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/pages/cart.css">
 </head>
-<body>
-  <div id="main-navbar"></div>
+<body style="background-color: var(--color-bg);">
+  
+  <header class="secure-header">
+    <div class="container">
+      <a href="index.html" class="secure-header__brand">Lumina Commerce</a>
+      <div class="secure-header__trust">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure Checkout
+      </div>
+    </div>
+  </header>
 
-  <main class="container fade-in">
+  <main class="container checkout-container fade-in">
+    <h1 class="checkout-title">Checkout</h1>
     
-    <div class="page-hero" style="padding-top: var(--space-8); padding-bottom: 0;">
-      <h1 class="page-hero__title" data-i18n="cart_title">Keranjang Belanja</h1>
-    </div>
-
-    <!-- Empty State -->
-    <div id="cart-empty" class="empty-state hidden" style="margin-top: 50px; margin-bottom: 100px;">
-      <div class="empty-state__icon">🛒</div>
-      <h3 class="empty-state__title" data-i18n="cart_empty">Keranjang Anda kosong</h3>
-      <p class="empty-state__text" data-i18n="cart_empty_desc">Belum ada barang di keranjang Anda. Yuk, mulai belanja!</p>
-      <a href="./catalog.html" class="btn btn--primary" style="margin-top:20px;" data-i18n="start_shopping">Mulai Belanja</a>
-    </div>
-
-    <!-- Active Cart -->
-    <div id="cart-content" class="cart-layout" style="display:none;">
+    <div class="checkout-layout">
       
-      <!-- Left side: Items & Forms -->
-      <div class="cart-main">
-        <div class="checkout-steps">
-          <div class="checkout-step active" id="step1-indicator"></div>
-          <div class="checkout-step" id="step2-indicator"></div>
-        </div>
-
-        <!-- Step 1: Cart Items -->
-        <div id="step1-cart" class="checkout-form active">
-          <div class="cart-items-wrap" id="cart-items-container">
-            <!-- Items injected via JS -->
+      <!-- Left Column: Details -->
+      <div class="checkout-details">
+        
+        <!-- Address -->
+        <div class="checkout-card">
+          <div class="checkout-card__header">
+            <h2 class="checkout-card__title">Shipping Address</h2>
+            <div class="checkout-card__action">Change</div>
+          </div>
+          <div class="address-block">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <strong>John Doe</strong>
+              123 Commerce Boulevard, Suite 400<br>
+              Jakarta Selatan, DKI Jakarta 12345<br>
+              +62 812 3456 7890
+            </div>
           </div>
         </div>
 
-        <!-- Step 2: Checkout Form -->
-        <div id="step2-checkout" class="checkout-form">
-          <h3 class="mb-4" data-i18n="shipping_address">Alamat Pengiriman</h3>
-          
-          <div class="form-group">
-            <label data-i18n="full_name">Nama Lengkap</label>
-            <input type="text" id="chk-name" required>
+        <!-- Delivery -->
+        <div class="checkout-card">
+          <div class="checkout-card__header">
+            <h2 class="checkout-card__title">Delivery Service</h2>
           </div>
-          
-          <div style="display:flex; gap:16px;">
-            <div class="form-group" style="flex:1;">
-              <label data-i18n="email">Email</label>
-              <input type="email" id="chk-email" required>
+          <div class="radio-option selected">
+            <div class="radio-option__left">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="radio-option__title">Regular Delivery</div>
+                <div class="radio-option__desc">2 - 3 Days. Trackable.</div>
+              </div>
             </div>
-            <div class="form-group" style="flex:1;">
-              <label data-i18n="phone">No. HP</label>
-              <input type="tel" id="chk-phone" required>
-            </div>
+            <div class="radio-option__price">Rp 15.000</div>
           </div>
+          <div class="radio-option">
+            <div class="radio-option__left">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="radio-option__title">Next Day</div>
+                <div class="radio-option__desc">Delivered tomorrow by 8 PM.</div>
+              </div>
+            </div>
+            <div class="radio-option__price">Rp 25.000</div>
+          </div>
+          <div class="radio-option">
+            <div class="radio-option__left">
+              <div class="radio-circle"></div>
+              <div>
+                <div class="radio-option__title">Instant Courier <span class="badge badge--pill" style="background-color: var(--color-tertiary); color: white; font-size: 10px; margin-left: 4px;">FAST</span></div>
+                <div class="radio-option__desc">Delivered within 3 hours.</div>
+              </div>
+            </div>
+            <div class="radio-option__price">Rp 45.000</div>
+          </div>
+        </div>
 
-          <div class="form-group">
-            <label data-i18n="address">Alamat Lengkap</label>
-            <input type="text" id="chk-address" required>
+        <!-- Payment -->
+        <div class="checkout-card">
+          <div class="checkout-card__header">
+            <h2 class="checkout-card__title">Payment Method</h2>
           </div>
-
-          <div style="display:flex; gap:16px;">
-            <div class="form-group" style="flex:1;">
-              <label data-i18n="city">Kota</label>
-              <input type="text" id="chk-city" required>
-            </div>
-            <div class="form-group" style="flex:1;">
-              <label data-i18n="postal_code">Kode Pos</label>
-              <input type="text" id="chk-zip" required>
-            </div>
-          </div>
-
-          <h3 class="mt-6 mb-4" data-i18n="payment_method">Metode Pembayaran</h3>
-          <div class="payment-methods">
-            <div class="payment-method active" data-method="transfer">
-              <div class="payment-method__icon">🏦</div>
-              <div class="payment-method__name">Transfer Bank</div>
-            </div>
-            <div class="payment-method" data-method="ewallet">
-              <div class="payment-method__icon">📱</div>
-              <div class="payment-method__name">E-Wallet</div>
-            </div>
-            <div class="payment-method" data-method="cod">
-              <div class="payment-method__icon">💵</div>
-              <div class="payment-method__name">COD</div>
+          <div class="radio-option selected">
+            <div class="radio-option__left">
+              <div class="radio-circle"></div>
+              <div class="radio-option__icon">QRIS</div>
+              <div>
+                <div class="radio-option__title">QRIS - E-Wallet & Bank App</div>
+                <div class="radio-option__desc">Scan code with your preferred app</div>
+              </div>
             </div>
           </div>
-
-          <button class="btn btn--secondary" id="btn-back" style="margin-right:10px;">Kembali</button>
+          <div class="radio-option">
+            <div class="radio-option__left">
+              <div class="radio-circle"></div>
+              <div class="radio-option__icon radio-option__icon--light"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg></div>
+              <div>
+                <div class="radio-option__title">Virtual Account Transfer</div>
+                <div class="radio-option__desc">BCA, Mandiri, BNI, BRI</div>
+              </div>
+            </div>
+          </div>
+          <div class="radio-option">
+            <div class="radio-option__left">
+              <div class="radio-circle"></div>
+              <div class="radio-option__icon radio-option__icon--light"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div>
+                <div class="radio-option__title">Credit / Debit Card</div>
+                <div class="radio-option__desc">Visa, Mastercard, JCB</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Right side: Summary -->
+      <!-- Right Column: Summary -->
       <div>
-        <div class="cart-summary">
-          <h3 class="cart-summary__title" data-i18n="order_summary">Ringkasan Pesanan</h3>
-          
-          <div class="promo-input-group" id="promo-group">
-            <input type="text" id="promo-input" placeholder="Kode Promo">
-            <button class="btn btn--secondary" id="btn-apply-promo">Gunakan</button>
+        <div class="checkout-card">
+          <div class="checkout-card__header">
+            <h2 class="checkout-card__title">Order Summary</h2>
           </div>
-          <div id="active-promo" style="display:none; margin-bottom:16px;">
-            <div class="promo-tag">
-              <span id="active-promo-code"></span>
-              <button id="btn-remove-promo">×</button>
+          
+          <div class="summary-items" id="checkout-items">
+            <!-- Injected via JavaScript -->
+          </div>
+
+          <div class="summary-totals">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="checkout-subtotal">Rp 0</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span>Rp 15.000</span>
+            </div>
+            <div class="summary-row">
+              <span>Platform Fee</span>
+              <span>Rp 2.000</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total</span>
+              <span id="checkout-total">Rp 0</span>
             </div>
           </div>
 
-          <div class="summary-row">
-            <span data-i18n="subtotal">Subtotal</span>
-            <span id="summary-subtotal">Rp 0</span>
-          </div>
-          <div class="summary-row" id="summary-discount-row" style="display:none;">
-            <span data-i18n="discount">Diskon</span>
-            <span id="summary-discount" style="color:var(--color-error)">- Rp 0</span>
-          </div>
-          <div class="summary-row">
-            <span data-i18n="shipping">Pengiriman</span>
-            <span id="summary-shipping">Gratis</span>
-          </div>
-          
-          <div class="summary-row summary-row--total">
-            <span data-i18n="total">Total</span>
-            <span id="summary-total">Rp 0</span>
-          </div>
-
-          <button class="btn btn--primary btn--full mt-6" id="btn-action" data-i18n="checkout">Checkout</button>
+          <button class="btn btn--primary btn--full btn--lg" onclick="checkout()">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Pay Now
+          </button>
+          <div class="secure-notice">By proceeding, you agree to our Terms of Service.</div>
         </div>
       </div>
-    </div>
 
+    </div>
   </main>
 
+  <!-- Footer -->
   <div id="main-footer"></div>
 
   <!-- Scripts -->
@@ -148,13 +171,70 @@
   <script src="./js/store.js"></script>
   <script src="./js/auth.js"></script>
   <script src="./js/main.js"></script>
-  <script src="./js/cart.js"></script>
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      renderNavbar();
-      renderFooter();
-      CartController.init();
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup simple radio selection UI
+      document.querySelectorAll('.radio-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+          const siblings = Array.from(this.parentNode.children).filter(el => el.classList.contains('radio-option'));
+          siblings.forEach(s => s.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+
+      renderCart();
     });
+
+    function renderCart() {
+      const cart = Store.getCart();
+      const itemsContainer = document.getElementById('checkout-items');
+      
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '<p style="color: var(--color-text-secondary); font-size: 0.875rem;">Your cart is empty.</p>';
+        document.getElementById('checkout-subtotal').textContent = Store.formatCurrency(0);
+        document.getElementById('checkout-total').textContent = Store.formatCurrency(0);
+        return;
+      }
+
+      let subtotal = 0;
+      itemsContainer.innerHTML = cart.map(item => {
+        const product = Store.getProductById(item.productId);
+        if (!product) return '';
+        
+        const itemTotal = product.price * item.quantity;
+        subtotal += itemTotal;
+
+        return `
+          <div class="summary-item">
+            <img src="${product.image}" alt="${product.name}" class="summary-item__img">
+            <div class="summary-item__info">
+              <div class="summary-item__title">${product.name}</div>
+              <div class="summary-item__qty">Qty: ${item.quantity}</div>
+            </div>
+            <div class="summary-item__price">${Store.formatCurrency(itemTotal)}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('checkout-subtotal').textContent = Store.formatCurrency(subtotal);
+      // Subtotal + 15000 (shipping) + 2000 (platform fee)
+      const total = subtotal + 15000 + 2000;
+      document.getElementById('checkout-total').textContent = Store.formatCurrency(total);
+    }
+
+    function checkout() {
+      const cart = Store.getCart();
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      if (confirm("Proceed with payment?")) {
+        Store.clearCart();
+        alert("Payment successful! Thank you for shopping at Lumina Commerce.");
+        window.location.href = "index.html";
+      }
+    }
   </script>
 </body>
 </html>

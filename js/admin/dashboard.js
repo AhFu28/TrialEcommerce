@@ -1,5 +1,5 @@
 /**
- * Faiz Store Admin — Dashboard Section
+ * Lumina Commerce Admin — Dashboard Section
  * KPI cards, charts, recent orders, low stock alerts
  */
 
@@ -214,7 +214,7 @@ const AdminDashboard = {
 
   // ── Low Stock ──────────────────────────────────────────────────────────────
   renderLowStock() {
-    const threshold = FAIZ_CONFIG.LOW_STOCK_THRESHOLD || 5;
+    const threshold = STORE_CONFIG.LOW_STOCK_THRESHOLD || 5;
     const lowStock = FaizStore.getProducts().filter(p => p.stock < threshold).slice(0, 8);
     const container = document.getElementById('lowStockList');
 
